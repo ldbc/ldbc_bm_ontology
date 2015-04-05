@@ -1,0 +1,2031 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<title>LDBC Benchmarking Ontology</title>
+<!-- 2015-02-02 Mon 15:48 -->
+<meta  http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta  name="generator" content="Org-mode" />
+<meta  name="author" content="Vladimir Alexiev, Ontotext Corp" />
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { color: green; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: visible;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline;}
+  pre.src-sh:before    { content: 'sh'; }
+  pre.src-bash:before  { content: 'sh'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-R:before     { content: 'R'; }
+  pre.src-perl:before  { content: 'Perl'; }
+  pre.src-java:before  { content: 'Java'; }
+  pre.src-sql:before   { content: 'SQL'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.right  { text-align: center;  }
+  th.left   { text-align: center;   }
+  th.center { text-align: center; }
+  td.right  { text-align: right;  }
+  td.left   { text-align: left;   }
+  td.center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara:nth-child(2) { display: inline; }
+  .footpara { display: block; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  /*]]>*/-->
+</style>
+
+<style type="text/css">
+h1,h2,h3,h4,h5,h6,h7 {font-family: Arial}
+// don't want empty lines in auto-postamble
+.author, .date, .creator {-webkit-margin-before: 0em; -webkit-margin-after: 0em}
+// style for #+begin_abstract
+.abstract {margin: 1em; padding: 1em; border: 1px solid black}
+.abstract:before {content: "Abstract: "; font-weight: bold}
+// center the preamble (author name) and make it bigger
+#preamble p { font-size: 110%; margin-left: auto; margin-right: auto; text-align: center; }
+// table headers aligned same as table data
+th.left     {text-align:left}
+th.right    {text-align:right}
+// table horizontal&vertical borders. First value is top&bottom, second is left&right. http://www.w3schools.com/css/css_border.asp
+th, td {border-width: 1px; border-style: solid solid; border-spacing: 2px 2px; padding:4px 2px}
+// colored TODO keywords
+.CANCELED   {color: blue}
+.MAYBE      {color: blue}
+.POSTPONED  {color: blue}
+.INPROGRESS {color: orange}
+.NEXT       {color: orange}
+.IER        {color: orange}
+</style>
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2013 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+</head>
+<body>
+<div id="content">
+<h1 class="title">LDBC Benchmarking Ontology</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#sec-1">1. Intro</a>
+<ul>
+<li><a href="#sec-1-1">1.1. Revisions</a></li>
+<li><a href="#sec-1-2">1.2. Prefixes</a></li>
+<li><a href="#sec-1-3">1.3. Testing Ontologies</a></li>
+<li><a href="#sec-1-4">1.4. Test Manifest</a></li>
+<li><a href="#sec-1-5">1.5. EARL</a></li>
+</ul>
+</li>
+<li><a href="#sec-2">2. Potential Benchmarks</a>
+<ul>
+<li><a href="#sec-2-1">2.1. <span class="todo TODO">TODO</span> SPB</a></li>
+<li><a href="#sec-2-2">2.2. <span class="todo TODO">TODO</span> SNB</a></li>
+<li><a href="#sec-2-3">2.3. BSBM 3.1</a></li>
+<li><a href="#sec-2-4">2.4. LOD2 Cluster</a></li>
+<li><a href="#sec-2-5">2.5. StarDog results</a></li>
+<li><a href="#sec-2-6">2.6. TPC-H</a></li>
+</ul>
+</li>
+<li><a href="#sec-3">3. BM Statistics</a>
+<ul>
+<li><a href="#sec-3-1">3.1. Stats Terms</a></li>
+<li><a href="#sec-3-2">3.2. Stats Ontologies</a>
+<ul>
+<li><a href="#sec-3-2-1">3.2.1. 270a</a></li>
+<li><a href="#sec-3-2-2">3.2.2. Disco</a></li>
+<li><a href="#sec-3-2-3">3.2.3. DDI CV, SStat</a>
+<ul>
+<li><a href="#sec-3-2-3-1">3.2.3.1. Summary Statistics</a></li>
+</ul>
+</li>
+<li><a href="#sec-3-2-4">3.2.4. SDMX</a></li>
+<li><a href="#sec-3-2-5">3.2.5. Cube</a></li>
+<li><a href="#sec-3-2-6">3.2.6. Cube Normalization</a></li>
+<li><a href="#sec-3-2-7">3.2.7. Normalization with Ontotext GraphDb Rules</a></li>
+<li><a href="#sec-3-2-8">3.2.8. Benchmark Result Dimensions</a></li>
+</ul>
+</li>
+<li><a href="#sec-3-3">3.3. SNB Sample1</a>
+<ul>
+<li><a href="#sec-3-3-1">3.3.1. SNB Turtle</a></li>
+<li><a href="#sec-3-3-2">3.3.2. SNB Header</a></li>
+<li><a href="#sec-3-3-3">3.3.3. SNB SPARQL</a></li>
+<li><a href="#sec-3-3-4">3.3.4. SNB Stat Ontology</a></li>
+<li><a href="#sec-3-3-5">3.3.5. <span class="todo TODO">TODO</span> SNB FDR</a></li>
+</ul>
+</li>
+<li><a href="#sec-3-4">3.4. SPB Results</a>
+<ul>
+<li><a href="#sec-3-4-1">3.4.1. <span class="todo TODO">TODO</span> SPB Turtle</a></li>
+</ul>
+</li>
+<li><a href="#sec-3-5">3.5. BM Stat Ontology</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-sec-1" class="outline-2">
+<h2 id="sec-1"><span class="section-number-2">1</span> Intro</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+The Benchmarking Ontology (BM) will cover the following scope. For each scope area we list some relevant ontologies that we have taken inspiration from, or reused.
+</p>
+<ul class="org-ul">
+<li>system under test (SUT)
+<ul class="org-ul">
+<li>hardware &amp; price: GoodRelations, <a href="http://answers.semanticweb.com/questions/27854/ontology-for-hardware-features">LinkedOpenCommerce</a>
+</li>
+<li>platform: DOAP, with dbpedia URLs for specific things (eg db:Linux, db:Java_Virtual_Machine)
+</li>
+<li>database: DOAP (project and relase), FOAF (vendor, sponsor)
+</li>
+</ul>
+</li>
+<li>benchmark definition: RDFUnit, test manifests for DAWG (SPARQL), R2RML, RDF
+<ul class="org-ul">
+<li>benchmark definition versions
+</li>
+</ul>
+</li>
+<li>benchmark execution setup
+<ul class="org-ul">
+<li>driver, parameters, SUT
+</li>
+</ul>
+</li>
+<li>benchmark generator, parameters
+<ul class="org-ul">
+<li>benchmark dataset (if it makes sense to save rather than rerun generator): VOID
+</li>
+</ul>
+</li>
+<li>results provenance: PROV
+</li>
+<li>detailed results log: RLOG
+</li>
+<li>results/assertions for each query: EARL, RDFUnit
+</li>
+<li>result statistics: CUBE, SDMX
+</li>
+</ul>
+
+<p>
+This is a rather ambitious scope.
+Following partner priorities, we start by describing Result Statistics, which is a little backwards but anyway.
+</p>
+</div>
+
+<div id="outline-container-sec-1-1" class="outline-3">
+<h3 id="sec-1-1"><span class="section-number-3">1.1</span> Revisions</h3>
+<div class="outline-text-3" id="text-1-1">
+<ul class="org-ul">
+<li><span class="timestamp-wrapper"><span class="timestamp">&lt;2015-01-21&gt;</span></span>: initial version. Overview of prefixes, potential benchmarks. Stat ontologies, Cube, SPB Sample1, BM Stat initial
+</li>
+<li><span class="timestamp-wrapper"><span class="timestamp">&lt;2015-02-02&gt;</span></span>: added discussion on Benchmark Result Dimensions <a href="#sec-3-2-8">3.2.8</a>
+</li>
+<li>NEXT: SPB Stat sample
+</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-sec-1-2" class="outline-3">
+<h3 id="sec-1-2"><span class="section-number-3">1.2</span> Prefixes</h3>
+<div class="outline-text-3" id="text-1-2">
+<p>
+All the prefixes we use are in <a href="./prefixes.ttl">./prefixes.ttl</a> and should be:
+</p>
+<ul class="org-ul">
+<li>Added to a repo (eg Ontotext GraphDb can do that from this file), or
+</li>
+<li>Prepended to Turtle files before loading/validating
+</li>
+</ul>
+<p>
+We use the prefix.cc service as much as possible. A lot of the used prefixes can be fetched from:
+</p>
+<ul class="org-ul">
+<li><a href="http://prefix.cc/dbr,dbo,dct,owl,prov,qb,qudt,rdf,rdfs,schema,skos,unit,xsd,sdmx.ttl">http://prefix.cc/dbr,dbo,dct,owl,prov,qb,qudt,rdf,rdfs,schema,skos,unit,xsd,sdmx.ttl</a>
+</li>
+</ul>
+<p>
+We include here a very brief description
+</p>
+<table border="1" cellspacing="0" cellpadding="0" rules="all" frame="box">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="left" />
+
+<col  class="left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="left"><b>prefix</b></td>
+<td class="left"><b>ontology</b></td>
+<td class="left"><b>used for</b></td>
+</tr>
+
+<tr>
+<td class="left">DCT</td>
+<td class="left">Dublin Core Terms</td>
+<td class="left">various props, eg dct:extent of a Run</td>
+</tr>
+
+<tr>
+<td class="left">DBR</td>
+<td class="left">DBpedia resource</td>
+<td class="left">stable URLs, eg dbr:Linux, dbr:Java_Virtual_Machine</td>
+</tr>
+
+<tr>
+<td class="left">DBO</td>
+<td class="left">DBpedia Ontology</td>
+<td class="left">(maybe) a few properties</td>
+</tr>
+
+<tr>
+<td class="left">DOAP</td>
+<td class="left">Description of a Project</td>
+<td class="left">database, release</td>
+</tr>
+
+<tr>
+<td class="left">GR</td>
+<td class="left">Good Relations</td>
+<td class="left">price (or maybe will prefer schema.org)</td>
+</tr>
+
+<tr>
+<td class="left">OWL</td>
+<td class="left">Web Ontology Language</td>
+<td class="left">system ontology</td>
+</tr>
+
+<tr>
+<td class="left">PROV</td>
+<td class="left">Provenance Ontology</td>
+<td class="left">provenance of results, start/end of Run</td>
+</tr>
+
+<tr>
+<td class="left">QUDT</td>
+<td class="left">Quantities, Units, Dimensions and Types</td>
+<td class="left">Units of Measure in stats</td>
+</tr>
+
+<tr>
+<td class="left">RDF</td>
+<td class="left">Resource Description Framework</td>
+<td class="left">system ontology</td>
+</tr>
+
+<tr>
+<td class="left">RDFS</td>
+<td class="left">RDF Schema</td>
+<td class="left">system ontology</td>
+</tr>
+
+<tr>
+<td class="left">Schema</td>
+<td class="left">schema.org ontology</td>
+<td class="left">various props</td>
+</tr>
+
+<tr>
+<td class="left">SKOS</td>
+<td class="left">Simple Knowledge Organisation System</td>
+<td class="left">concepts and codelists (concept schemes)</td>
+</tr>
+
+<tr>
+<td class="left">SPIN</td>
+<td class="left">SPARQL Inferencing Notation</td>
+<td class="left">(maybe) constraints on cube representation</td>
+</tr>
+
+<tr>
+<td class="left">Unit</td>
+<td class="left">Units of Measure (part of QUDT)</td>
+<td class="left">Units of Measure in stats</td>
+</tr>
+
+<tr>
+<td class="left">XSD</td>
+<td class="left">XML Schema Datatypes</td>
+<td class="left">literal datatypes</td>
+</tr>
+
+<tr>
+<td class="left">SDMX*</td>
+<td class="left">Statistical Data and Metadata eXchange</td>
+<td class="left">statistical concepts</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="outline-container-sec-1-3" class="outline-3">
+<h3 id="sec-1-3"><span class="section-number-3">1.3</span> Testing Ontologies</h3>
+<div class="outline-text-3" id="text-1-3">
+<p>
+The idea to represent tests and test runs in RDF is very old.
+We've studied a number of testing ontologies that have influenced greatly our design.
+Still, we couldn't reuse a lot, because our domain is performance testing, not conformance testing.
+</p>
+
+<p>
+Below are some brief descriptions, followed by more details in subsections. Legend:
+</p>
+<ul class="org-ul">
+<li>x = well developed or widely used
+</li>
+<li>? = maybe will use
+</li>
+<li>+ = will use
+</li>
+</ul>
+<table border="1" cellspacing="0" cellpadding="0" rules="all" frame="box">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="left" />
+
+<col  class="left" />
+
+<col  class="left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="left"><b>s</b></td>
+<td class="left"><b>prefix</b></td>
+<td class="left"><b>ontology</b></td>
+<td class="left"><b>could be used for</b></td>
+</tr>
+
+<tr>
+<td class="left">x</td>
+<td class="left">EARL</td>
+<td class="left">Evaluation and Report Language</td>
+<td class="left">reporting conformance (pass/fail) claims</td>
+</tr>
+
+<tr>
+<td class="left">&#xa0;</td>
+<td class="left">NIF-STC</td>
+<td class="left">NIF test case</td>
+<td class="left">weak ontology for testing NLP Interchange Format</td>
+</tr>
+
+<tr>
+<td class="left">x</td>
+<td class="left">RDB2RDF-TC</td>
+<td class="left">RDB2RDF test case</td>
+<td class="left">testing RDB2RDF mapping language implementations</td>
+</tr>
+
+<tr>
+<td class="left">&#xa0;</td>
+<td class="left">RDB2RDF-test</td>
+<td class="left">RDB2RDF test</td>
+<td class="left">testing RDB2RDF. Missing</td>
+</tr>
+
+<tr>
+<td class="left">&#xa0;</td>
+<td class="left">RDF-test</td>
+<td class="left">RDF 1.1 test</td>
+<td class="left">testing RDF parsers</td>
+</tr>
+
+<tr>
+<td class="left">&#xa0;</td>
+<td class="left">RDF-test1</td>
+<td class="left">RDF test (old)</td>
+<td class="left">testing RDF parsers</td>
+</tr>
+
+<tr>
+<td class="left">?</td>
+<td class="left">result-set</td>
+<td class="left">SPARQL result set</td>
+<td class="left">could be used in conformance/validation testing</td>
+</tr>
+
+<tr>
+<td class="left">+</td>
+<td class="left">RLOG</td>
+<td class="left">RDF Logging Ontology</td>
+<td class="left">basic log entry (timestamp, level, message)</td>
+</tr>
+
+<tr>
+<td class="left">x</td>
+<td class="left">RUT*</td>
+<td class="left">RDFUnit: test generation and excution</td>
+<td class="left">test definitions and test results</td>
+</tr>
+
+<tr>
+<td class="left">&#xa0;</td>
+<td class="left">test-dawg</td>
+<td class="left">SPARQL query testing (old)</td>
+<td class="left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="left">?</td>
+<td class="left">test-descr</td>
+<td class="left">Test Metadata, see <a href="http://www.w3.org/TR/test-metadata/">working note</a></td>
+<td class="left">Purpose, grouping, etc</td>
+</tr>
+
+<tr>
+<td class="left">+</td>
+<td class="left">test-manifest</td>
+<td class="left">Test Manifest</td>
+<td class="left">representing test cases</td>
+</tr>
+
+<tr>
+<td class="left">x</td>
+<td class="left">test-query</td>
+<td class="left">SPARQL 1.1 query testing</td>
+<td class="left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="left">&#xa0;</td>
+<td class="left">test-update</td>
+<td class="left">SPARQL 1.1 update testing</td>
+<td class="left">&#xa0;</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="outline-container-sec-1-4" class="outline-3">
+<h3 id="sec-1-4"><span class="section-number-3">1.4</span> Test Manifest</h3>
+<div class="outline-text-3" id="text-1-4">
+<p>
+A test Manifest is a ttl description of a test suite (set of test cases), pointing to all relevant files (inputs, queries, "action" or expected output).
+Manifests are widely used by W3C working groups.
+Because test cases are made up mostly of files, it is notorious how well the directory and RDF structures are inter-meshed, and we should learn from this.
+Test cases and queries have stable identifiers, which are used as pivots in test reporting (see EARL).
+</p>
+
+<p>
+Examples:
+</p>
+<dl class="org-dl">
+<dt> RDF 1.1 </dt><dd><ul class="org-ul">
+<li>A number of tests for the various RDF serialization formats <a href="http://www.w3.org/TR/rdf11-testcases/">http://www.w3.org/TR/rdf11-testcases/</a>. Eg for Turtle 1.1:
+</li>
+<li>tests <a href="http://www.w3.org/2013/TurtleTests/">http://www.w3.org/2013/TurtleTests/</a>
+</li>
+<li>manifest <a href="http://www.w3.org/2013/TurtleTests/manifest.ttl">http://www.w3.org/2013/TurtleTests/manifest.ttl</a>
+</li>
+<li>methodology: <a href="http://www.w3.org/2013/TurtleTests/README">http://www.w3.org/2013/TurtleTests/README</a>, <a href="http://www.w3.org/2011/rdf-wg/wiki/Turtle_Test_Suite">http://www.w3.org/2011/rdf-wg/wiki/Turtle_Test_Suite</a>
+</li>
+</ul>
+</dd>
+<dt> SPARQL/DAWG/SparqlScore </dt><dd><ul class="org-ul">
+<li>old tests: <a href="http://www.w3.org/2001/sw/DataAccess/">http://www.w3.org/2001/sw/DataAccess/</a>, <a href="http://www.w3.org/2001/sw/DataAccess/data-r2">http://www.w3.org/2001/sw/DataAccess/data-r2</a>
+</li>
+<li>new test: <a href="http://www.w3.org/2009/sparql/docs/tests">http://www.w3.org/2009/sparql/docs/tests</a>
+</li>
+</ul>
+</dd>
+<dt> R2RML </dt><dd><ul class="org-ul">
+<li>Methodology: <a href="http://www.w3.org/2001/sw/rdb2rdf/wiki/Submitting_Test_Results">http://www.w3.org/2001/sw/rdb2rdf/wiki/Submitting_Test_Results</a>
+</li>
+<li>Test cases: <a href="http://www.w3.org/TR/rdb2rdf-test-cases/">http://www.w3.org/TR/rdb2rdf-test-cases/</a>
+</li>
+<li>Test files &amp; manifests: <a href="https://dvcs.w3.org/hg/rdb2rdf-tests/file/">https://dvcs.w3.org/hg/rdb2rdf-tests/file/</a>
+</li>
+<li>Ontology <a href="http://vocab.deri.ie/rdb2rdftc.html">http://vocab.deri.ie/rdb2rdftc.html</a>, <a href="http://vocab.deri.ie/rdb2rdftc.ttl">http://vocab.deri.ie/rdb2rdftc.ttl</a>.
+Carries input (database statements), R2RML mapping, expected output.
+<ul class="org-ul">
+<li>This one is missing: <a href="http://purl.org/NET/rdb2rdf-test">http://purl.org/NET/rdb2rdf-test</a>
+</li>
+<li>This one has various problems: <a href="https://github.com/boricles/rdb2rdf-th/blob/master/model/rdb2rdf-test.ttl">https://github.com/boricles/rdb2rdf-th/blob/master/model/rdb2rdf-test.ttl</a>,
+eg some ObjectProperties are duplicated as AnnotationProperties
+</li>
+</ul>
+</li>
+<li>Numerous manifests. Eg for two Test Cases:
+<ul class="org-ul">
+<li><a href="https://dvcs.w3.org/hg/rdb2rdf-tests/raw-file/d53b6a1cc393/D025-3tables3primarykeys3foreignkeys/manifest.ttl">https://dvcs.w3.org/hg/rdb2rdf-tests/raw-file/d53b6a1cc393/D025-3tables3primarykeys3foreignkeys/manifest.ttl</a>
+</li>
+<li><a href="https://dvcs.w3.org/hg/rdb2rdf-tests/raw-file/d53b6a1cc393/D011-M2MRelations/manifest.ttl">https://dvcs.w3.org/hg/rdb2rdf-tests/raw-file/d53b6a1cc393/D011-M2MRelations/manifest.ttl</a>
+</li>
+</ul>
+</li>
+</ul>
+</dd>
+</dl>
+</div>
+</div>
+<div id="outline-container-sec-1-5" class="outline-3">
+<h3 id="sec-1-5"><span class="section-number-3">1.5</span> EARL</h3>
+<div class="outline-text-3" id="text-1-5">
+<p>
+EARL (Evaluation and Report Language) was first developed by the WAI Evaluation and Repair Tools Working Group, but is now used widely by W3C groups.
+</p>
+<ul class="org-ul">
+<li>Intro: <a href="http://www.w3.org/WAI/intro/earl.php">http://www.w3.org/WAI/intro/earl.php</a>
+</li>
+<li>Requirements: <a href="http://www.w3.org/TR/EARL10-Requirements/">http://www.w3.org/TR/EARL10-Requirements/</a>
+</li>
+<li>Guide: <a href="http://www.w3.org/TR/EARL10-Guide/">http://www.w3.org/TR/EARL10-Guide/</a>
+</li>
+<li>Definition: <a href="http://www.w3.org/TR/EARL10-Schema/">http://www.w3.org/TR/EARL10-Schema/</a>
+</li>
+</ul>
+<p>
+Most W3C specifications have an obligation to produce an Implementation Report that list at least 2 conformant implementations for every spec feature.
+This requires conformance testing, and EARL  is designed to express conformance claims.
+By asking implementors to provide results in EARL, the implementation reports of numerous systems can be assembled automatically to a webpage.
+We want to use the same idea for the benchmark reporting section of the LDBC website.
+</p>
+
+<p>
+Examples:
+</p>
+<dl class="org-dl">
+<dt> RDF 1.1 </dt><dd><ul class="org-ul">
+<li>Includes a number of implementation reports for varous RDF serialization formats. Eg for Turtle 1.1:
+</li>
+<li>Implementation report: <a href="https://dvcs.w3.org/hg/rdf/raw-file/default/rdf-turtle/reports/earl.ttl">https://dvcs.w3.org/hg/rdf/raw-file/default/rdf-turtle/reports/earl.ttl</a>
+</li>
+<li>Report in EARL: <a href="https://dvcs.w3.org/hg/rdf/raw-file/default/rdf-turtle/reports/index.html">https://dvcs.w3.org/hg/rdf/raw-file/default/rdf-turtle/reports/index.html</a>
+</li>
+<li>Individual EARL files: <a href="https://dvcs.w3.org/hg/rdf/raw-file/default/rdf-turtle/reports/index.html#individual-test-results">https://dvcs.w3.org/hg/rdf/raw-file/default/rdf-turtle/reports/index.html#individual-test-results</a>
+</li>
+</ul>
+</dd>
+<dt> RDB2RDF </dt><dd><ul class="org-ul">
+<li>Implementation report: <a href="http://www.w3.org/TR/rdb2rdf-implementations/">http://www.w3.org/TR/rdb2rdf-implementations/</a>
+</li>
+<li>EARL files are linked to the column headers, eg:
+<ul class="org-ul">
+<li>Virtuoso: <a href="http://mappingpedia.linkeddata.es/rdb2rdf/implementations/virtuoso/Rdb2RdfW3c1206_virtuoso_earl.ttl">http://mappingpedia.linkeddata.es/rdb2rdf/implementations/virtuoso/Rdb2RdfW3c1206_virtuoso_earl.ttl</a>
+</li>
+<li>RDB2RDF over Postgres: <a href="http://mappingpedia.linkeddata.es/rdb2rdf/implementations/rdf-rdb2rdf/with-postgres.ttl">http://mappingpedia.linkeddata.es/rdb2rdf/implementations/rdf-rdb2rdf/with-postgres.ttl</a>
+</li>
+</ul>
+</li>
+<li>I have looked at the Perl implementation in more detail:
+<ul class="org-ul">
+<li>Report with more detailed explanations of each result: <a href="https://github.com/tobyink/p5-rdf-rdb2rdf/blob/master/meta/earl/summary.html">https://github.com/tobyink/p5-rdf-rdb2rdf/blob/master/meta/earl/summary.html</a>
+</li>
+<li>EARL files: <a href="https://github.com/tobyink/p5-rdf-rdb2rdf/tree/master/meta/earl">https://github.com/tobyink/p5-rdf-rdb2rdf/tree/master/meta/earl</a>
+</li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt> SPARQL </dt><dd><ul class="org-ul">
+<li>Implementation report <a href="http://www.w3.org/2009/sparql/implementations/">http://www.w3.org/2009/sparql/implementations/</a>
+</li>
+<li>EARL files are linked at the end, eg
+<ul class="org-ul">
+<li>Jena ARQ: <a href="http://people.apache.org/~andy/SPARQL-EARL-Current/ARQ-earl-2012-11-27.ttl">http://people.apache.org/~andy/SPARQL-EARL-Current/ARQ-earl-2012-11-27.ttl</a>
+</li>
+<li>ARQ with entailment (inference): <a href="http://arq-inference.googlecode.com/svn/ARQ_Inference/ARQ_Entailment_ImplRep.ttl">http://arq-inference.googlecode.com/svn/ARQ_Inference/ARQ_Entailment_ImplRep.ttl</a>
+</li>
+</ul>
+</li>
+<li>EARL files (old): <a href="http://www.w3.org/2001/sw/DataAccess/tests/earl">http://www.w3.org/2001/sw/DataAccess/tests/earl</a>
+</li>
+</ul>
+</dd>
+</dl>
+
+<p>
+Report makers (HTML generators):
+</p>
+<ul class="org-ul">
+<li>Report for RDF: <a href="https://github.com/gkellogg/earl-report">https://github.com/gkellogg/earl-report</a>
+</li>
+<li>Report for SPARQL: <a href="https://github.com/kasei/SPARQL-1.1-Implementation-Report">https://github.com/kasei/SPARQL-1.1-Implementation-Report</a>
+</li>
+<li>Report for RDB2RDF Perl: <a href="https://github.com/tobyink/p5-rdf-rdb2rdf/blob/master/devel.utils/earl-summaries.pl">https://github.com/tobyink/p5-rdf-rdb2rdf/blob/master/devel.utils/earl-summaries.pl</a>
+</li>
+</ul>
+
+<p>
+Test drivers (harness &amp; EARL generators):
+</p>
+<ul class="org-ul">
+<li>RDB2RDF
+<ul class="org-ul">
+<li>Source: <a href="https://github.com/boricles/rdb2rdf-th">https://github.com/boricles/rdb2rdf-th</a>
+</li>
+<li>Binary: <a href="http://boris.villazon.terrazas.name/projects/rdb2rdf/tc/th/rdb2rdf-th_bin_0.0.8.zip">http://boris.villazon.terrazas.name/projects/rdb2rdf/tc/th/rdb2rdf-th_bin_0.0.8.zip</a>
+</li>
+<li>Description: <a href="http://www.w3.org/2001/sw/rdb2rdf/wiki/Submitting_Test_Results#Phase_3._Download_the_Test_Harness_software">http://www.w3.org/2001/sw/rdb2rdf/wiki/Submitting_Test_Results#Phase_3._Download_the_Test_Harness_software</a>
+</li>
+</ul>
+</li>
+<li>RDB2RDF Perl: <a href="https://github.com/tobyink/p5-rdf-rdb2rdf/tree/master/xt">https://github.com/tobyink/p5-rdf-rdb2rdf/tree/master/xt</a>, in particular <a href="https://github.com/tobyink/p5-rdf-rdb2rdf/tree/master/xt/lib/Test/RDB2RDF/Suite.pm">https://github.com/tobyink/p5-rdf-rdb2rdf/tree/master/xt/lib/Test/RDB2RDF/Suite.pm</a>
+</li>
+<li>EARL manipulation: <a href="https://metacpan.org/source/GWILLIAMS/RDF-EARL-0.001/README">https://metacpan.org/source/GWILLIAMS/RDF-EARL-0.001/README</a>
+</li>
+</ul>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-2" class="outline-2">
+<h2 id="sec-2"><span class="section-number-2">2</span> Potential Benchmarks</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+We follow an example-driven appproach: first make Turtle files for specific examples, then make an ontology to fit them.
+(Since we borrow liberally from other ontologies, in many cases we make what's called Application Profiles,
+i.e. specifications about the shapes of our RDF.)
+</p>
+
+<p>
+We may cover the following examples, listed in decreasing priority. Our intent is for BM to be able to represent all of these benchmarks
+</p>
+<table border="1" cellspacing="0" cellpadding="0" rules="all" frame="box">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="left" />
+
+<col  class="left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="left"><b>Abbrev</b></td>
+<td class="left"><b>Benchmark</b></td>
+<td class="left"><b>MoSCoW</b></td>
+</tr>
+
+<tr>
+<td class="left">SPB</td>
+<td class="left">Semantic Publishing Benchmark</td>
+<td class="left">must</td>
+</tr>
+
+<tr>
+<td class="left">SNB</td>
+<td class="left">Social Network Benchmark</td>
+<td class="left">must</td>
+</tr>
+
+<tr>
+<td class="left">BSBM</td>
+<td class="left">Berlin SPARQL Benchmark</td>
+<td class="left">should</td>
+</tr>
+
+<tr>
+<td class="left">SP2B</td>
+<td class="left">SPARQL 2 Benchmark</td>
+<td class="left">could</td>
+</tr>
+
+<tr>
+<td class="left">LUBM</td>
+<td class="left">LUBM Lehigh University Benchmark</td>
+<td class="left">could</td>
+</tr>
+
+<tr>
+<td class="left">TPC-H</td>
+<td class="left">Transaction Processing Council H</td>
+<td class="left">won't</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="outline-container-sec-2-1" class="outline-3">
+<h3 id="sec-2-1"><span class="section-number-3">2.1</span> <span class="todo TODO">TODO</span> SPB</h3>
+<div class="outline-text-3" id="text-2-1">
+<p>
+Update description &amp; links
+</p>
+<ul class="org-ul">
+<li>SPB Spec <a href="https://github.com/ldbc/ldbc_spb_bm/blob/master/doc/LDBC_SPB_v0.1.pdf">https://github.com/ldbc/ldbc_spb_bm/blob/master/doc/LDBC_SPB_v0.1.pdf</a>
+</li>
+<li>SPB FDR <a href="https://github.com/ldbc/ldbc_spb_bm/blob/master/doc/LDBC_SPB_FDR_v1.0.docx">https://github.com/ldbc/ldbc_spb_bm/blob/master/doc/LDBC_SPB_FDR_v1.0.docx</a>
+</li>
+<li>latest description
+</li>
+<li>a dataset, with its description
+</li>
+<li>sample test run results
+</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-sec-2-2" class="outline-3">
+<h3 id="sec-2-2"><span class="section-number-3">2.2</span> <span class="todo TODO">TODO</span> SNB</h3>
+<div class="outline-text-3" id="text-2-2">
+<p>
+Update description &amp; links
+</p>
+<ul class="org-ul">
+<li>latest description. SPB presents an interesting challenge, in that the queries have several representations (English, SPARQL, CYPHER)
+</li>
+<li>a dataset, with its description
+</li>
+<li>sample test run results. Would be best if you have from two different systems
+</li>
+<li>SNB spec <a href="https://github.com/ldbc/ldbc_snb_docs/blob/master/LDBC_SNB_v0.1.5.pdf">https://github.com/ldbc/ldbc_snb_docs/blob/master/LDBC_SNB_v0.1.5.pdf</a>
+</li>
+<li>SNB Interactive Workload design doc (<a href="http://ldbc.eu/sites/default/files/LDBC_D3.3.34.pdf">http://ldbc.eu/sites/default/files/LDBC_D3.3.34.pdf</a>)
+</li>
+<li>SNB Full Disclosure: full_disclosure.txt and supporting_files/
+</li>
+<li>SNB interactive workload mix (first section of <a href="http://ldbc.eu/sites/default/files/LDBC_D2.2.3_final.pdf">http://ldbc.eu/sites/default/files/LDBC_D2.2.3_final.pdf</a>)
+</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-sec-2-3" class="outline-3">
+<h3 id="sec-2-3"><span class="section-number-3">2.3</span> BSBM 3.1</h3>
+<div class="outline-text-3" id="text-2-3">
+<ul class="org-ul">
+<li>spec 3.1: <a href="http://wifo5-03.informatik.uni-mannheim.de/bizer/berlinsparqlbenchmark/spec/index.html">http://wifo5-03.informatik.uni-mannheim.de/bizer/berlinsparqlbenchmark/spec/index.html</a>
+</li>
+<li>data generator: <a href="http://wifo5-03.informatik.uni-mannheim.de/bizer/berlinsparqlbenchmark/spec/BenchmarkRules/index.html#datagenerator">http://wifo5-03.informatik.uni-mannheim.de/bizer/berlinsparqlbenchmark/spec/BenchmarkRules/index.html#datagenerator</a>
+</li>
+<li>run Apr 2013: <a href="http://wifo5-03.informatik.uni-mannheim.de/bizer/berlinsparqlbenchmark/results/V7/index.html">http://wifo5-03.informatik.uni-mannheim.de/bizer/berlinsparqlbenchmark/results/V7/index.html</a>
+</li>
+<li>driver
+<ul class="org-ul">
+<li>BSBM release 0.2: <a href="http://sourceforge.net/projects/bsbmtools/files/bsbmtools/bsbmtools-0.2/bsbmtools-v0.2.zip">http://sourceforge.net/projects/bsbmtools/files/bsbmtools/bsbmtools-0.2/bsbmtools-v0.2.zip</a>.
+It seems this one is obsoleted by the next one
+</li>
+<li>BSBM+BI release 0.7.8: <a href="http://sourceforge.net/projects/bibm/files/bibm-0.7.8.tgz">http://sourceforge.net/projects/bibm/files/bibm-0.7.8.tgz</a>
+</li>
+</ul>
+</li>
+<li>Queries
+<ul class="org-ul">
+<li>query format: <a href="http://sourceforge.net/p/bibm/code/HEAD/tree/trunk/bibm/docs/OpenLinkBDSMUserGuide.html">http://sourceforge.net/p/bibm/code/HEAD/tree/trunk/bibm/docs/OpenLinkBDSMUserGuide.html</a>
+</li>
+<li>query files: <a href="http://sourceforge.net/p/bibm/code/HEAD/tree/trunk/bibm/bsbm/">http://sourceforge.net/p/bibm/code/HEAD/tree/trunk/bibm/bsbm/</a>
+</li>
+<li>queries on page: <a href="http://wifo5-03.informatik.uni-mannheim.de/bizer/berlinsparqlbenchmark/V3/spec/ExploreUseCase/index.html#queryTripleQ1">http://wifo5-03.informatik.uni-mannheim.de/bizer/berlinsparqlbenchmark/V3/spec/ExploreUseCase/index.html#queryTripleQ1</a>
+</li>
+</ul>
+</li>
+<li>Virtuoso and OWLIM results on a couple of scaleFactors for:
+<ul class="org-ul">
+<li>Explore Use Case: <a href="http://wifo5-03.informatik.uni-mannheim.de/bizer/berlinsparqlbenchmark/results/V7/index.html#resultsExplore">http://wifo5-03.informatik.uni-mannheim.de/bizer/berlinsparqlbenchmark/results/V7/index.html#resultsExplore</a>
+</li>
+<li>BI use case: <a href="http://wifo5-03.informatik.uni-mannheim.de/bizer/berlinsparqlbenchmark/results/V7/index.html#resultsBI">http://wifo5-03.informatik.uni-mannheim.de/bizer/berlinsparqlbenchmark/results/V7/index.html#resultsBI</a>
+</li>
+</ul>
+</li>
+<li>Cluster
+<ul class="org-ul">
+<li>Cluster description (but it's not very detailed)
+</li>
+<li>Cluster results: <a href="http://wifo5-03.informatik.uni-mannheim.de/bizer/berlinsparqlbenchmark/results/V7/index.html#resultsCluster">http://wifo5-03.informatik.uni-mannheim.de/bizer/berlinsparqlbenchmark/results/V7/index.html#resultsCluster</a>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-sec-2-4" class="outline-3">
+<h3 id="sec-2-4"><span class="section-number-3">2.4</span> LOD2 Cluster</h3>
+<div class="outline-text-3" id="text-2-4">
+<p>
+Description of sophisticated hardware:
+</p>
+<ul class="org-ul">
+<li><a href="http://static.lod2.eu/Deliverables/LOD2_D2.1.3_LOD_Cloud_Hosted_On_The_LOD2_Knowledge_Store_Cluster_50B_Triples.pdf">http://static.lod2.eu/Deliverables/LOD2_D2.1.3_LOD_Cloud_Hosted_On_The_LOD2_Knowledge_Store_Cluster_50B_Triples.pdf</a>
+</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-sec-2-5" class="outline-3">
+<h3 id="sec-2-5"><span class="section-number-3">2.5</span> StarDog results</h3>
+<div class="outline-text-3" id="text-2-5">
+<p>
+Succinct sheet describing results for BSBM, LUBM, SP2B:
+</p>
+<ul class="org-ul">
+<li><a href="https://docs.google.com/spreadsheets/d/1oHSWX_0ChZ61ofipZ1CMsW7OhyujioR28AfHzU9d56k/pubhtml">https://docs.google.com/spreadsheets/d/1oHSWX_0ChZ61ofipZ1CMsW7OhyujioR28AfHzU9d56k/pubhtml</a>
+</li>
+</ul>
+<p>
+Nice variety but little detail
+</p>
+</div>
+</div>
+<div id="outline-container-sec-2-6" class="outline-3">
+<h3 id="sec-2-6"><span class="section-number-3">2.6</span> TPC-H</h3>
+<div class="outline-text-3" id="text-2-6">
+<ul class="org-ul">
+<li><a href="http://www.tpc.org/tpch/results/tpch_price_perf_results.asp">http://www.tpc.org/tpch/results/tpch_price_perf_results.asp</a>
+</li>
+</ul>
+<p>
+Tons of detial, maybe not so relevant for us. Each run has representations at these levels of detail:
+</p>
+<ul class="org-ul">
+<li>One line
+<pre class="example">
+Rank, Company, System, QphH, Price/QphH, Watts/KQphH, System Availability, Database, Operating System, Date Submitted, Cluster
+</pre>
+</li>
+<li>Executive Summary: eg 13 pages
+</li>
+<li>Full Disclosure Report: eg 37 pages
+</li>
+<li>Supporting Files: 6Mb to 3Gb(!): won't look at them
+</li>
+</ul>
+<p>
+Results:
+</p>
+<ul class="org-ul">
+<li>TPC-H Oracle:
+<a href="http://www.tpc.org/tpch/results/tpch_result_detail.asp?id=111092601&layout=">http://www.tpc.org/tpch/results/tpch_result_detail.asp?id=111092601&layout=</a>
+</li>
+<li>TPC-H Huawei:
+<a href="http://www.tpc.org/tpch/results/tpch_result_detail.asp?id=113111601&layout=">http://www.tpc.org/tpch/results/tpch_result_detail.asp?id=113111601&layout=</a>
+</li>
+</ul>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-3" class="outline-2">
+<h2 id="sec-3"><span class="section-number-2">3</span> BM Statistics</h2>
+<div class="outline-text-2" id="text-3">
+<p>
+The most important output of BM is the statistical representation of benchmark results.
+</p>
+</div>
+<div id="outline-container-sec-3-1" class="outline-3">
+<h3 id="sec-3-1"><span class="section-number-3">3.1</span> Stats Terms</h3>
+<div class="outline-text-3" id="text-3-1">
+<p>
+It may be hard for someone without stats background to understand stats ontologies, so we provide first some terms from stats/OLAP.
+Pleae note that these terms are slanted towards teh Cube ontology.
+The key terms are Dimension, Attribute, Measure.
+</p>
+<ul class="org-ul">
+<li>Cube: a multidimensional data structure carrying Observations
+</li>
+<li>Observation: a value plus a number of Components that help make sense of it
+</li>
+<li>Component: any of Dimension, Attribute or Measure; the facets defining the structure of a cube
+</li>
+<li>Data Structure Definition: the set of components defining a cube.
+</li>
+<li>Dimension: identifies the observations: where the observations lie
+<ul class="org-ul">
+<li>In a cube, all observations must have the same dimensions (no nulls are allowed), but some shortcuts/normalization are allowed
+</li>
+</ul>
+</li>
+<li>Attribute: qualify and interpret the value, eg: unit of measurement, estimated, provisional
+</li>
+<li>Measure: carries the observed value: what the values are
+</li>
+<li>measureType Dimension: a Dimension defining which Measure is applicable to an Observation (like a tag/discriminator in a <a href="https://en.wikipedia.org/wiki/Tagged_union">Tagged Union</a>)
+</li>
+<li>Slice: a cube subset where some of the Dimensions are fixed. Allows more economical cube description, and views over cubes (eg time series)
+</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-sec-3-2" class="outline-3">
+<h3 id="sec-3-2"><span class="section-number-3">3.2</span> Stats Ontologies</h3>
+<div class="outline-text-3" id="text-3-2">
+<p>
+We've looked at a number of stats ontologies, described in subsections below (the ones we use are described last). Legend:
+</p>
+<ul class="org-ul">
+<li>x = well developed or widely used
+</li>
+<li>? = maybe will use
+</li>
+<li>+ = will use
+</li>
+</ul>
+<table border="1" cellspacing="0" cellpadding="0" rules="all" frame="box">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="left" />
+
+<col  class="left" />
+
+<col  class="left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="left"><b>s</b></td>
+<td class="left"><b>prefix</b></td>
+<td class="left"><b>ontology</b></td>
+<td class="left"><b>could be used for</b></td>
+</tr>
+
+<tr>
+<td class="left">&#xa0;</td>
+<td class="left">Disco</td>
+<td class="left">DDI RDF Discovery Vocabulary (Data Documentation Initiative)</td>
+<td class="left">Detailed representation of stats, questions, cases..</td>
+</tr>
+
+<tr>
+<td class="left">+</td>
+<td class="left">QB</td>
+<td class="left">RDF Data Cube Vocabulary</td>
+<td class="left">"Canonical" stats ontology (SCOVO is the older version)</td>
+</tr>
+
+<tr>
+<td class="left">?</td>
+<td class="left">QB4OLAP</td>
+<td class="left">Cube for OLAP, see <a href="https://books.google.bg/books?id=C7x_BAAAQBAJ&lpg=PA554&ots=WohdQ_jPkk&dq=qb%253AcomponentAttachment&pg=PA558#v=onepage&q&f=true">Data Warehouse Systems: Design and Implementation</a> sec 14.3.2 p.557</td>
+<td class="left">Cube can't represent hierarchical dimensions</td>
+</tr>
+
+<tr>
+<td class="left">+</td>
+<td class="left">SDMX</td>
+<td class="left">Statistical Data and Metadata eXchange</td>
+<td class="left">common stat concepts, attributes, dimensions</td>
+</tr>
+
+<tr>
+<td class="left">?</td>
+<td class="left">SStat</td>
+<td class="left">DDI Controlled Vocabularies - SummaryStatistic</td>
+<td class="left">Concepts for summary stats (min, max, mean&#x2026;)</td>
+</tr>
+
+<tr>
+<td class="left">&#xa0;</td>
+<td class="left">XKOS</td>
+<td class="left">Extended Knowledge Organisation System</td>
+<td class="left">SKOS extension with statistical levels</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="outline-container-sec-3-2-1" class="outline-4">
+<h4 id="sec-3-2-1"><span class="section-number-4">3.2.1</span> 270a</h4>
+<div class="outline-text-4" id="text-3-2-1">
+<p>
+The site <a href="http://270a.info/">http://270a.info/</a> is a treasure trove of deployed datasets, patterns, codelists, etc.
+It includes stats data from some 10 national and international stats offices, including Eurostat, ECB, WB, FAO, etc.
+</p>
+
+<p>
+Interesting articles:
+</p>
+<ul class="org-ul">
+<li><a href="http://csarven.ca/linked-sdmx-data">http://csarven.ca/linked-sdmx-data</a>
+</li>
+<li><a href="http://csarven.ca/linked-statistical-data-analysis">http://csarven.ca/linked-statistical-data-analysis</a>
+</li>
+<li><a href="http://csarven.ca/statistical-linked-dataspaces">http://csarven.ca/statistical-linked-dataspaces</a> (MS thesis)
+</li>
+</ul>
+
+<p>
+Tool
+</p>
+<ul class="org-ul">
+<li><a href="http://stats.270a.info/cube-designer">http://stats.270a.info/cube-designer</a>: pick up cube components, generates a cube definition
+</li>
+</ul>
+<p>
+Eg this is how I found they have concepts for Percentile:
+</p>
+<div class="org-src-container">
+
+<pre class="src src-Turtle"><span style="color: #0000ff;">&lt;http://worldbank.270a.info/property/percentile&gt;</span> <span style="color: #a020f0;">a</span> <span style="color: #228b22;">qb:</span><span style="color: #008b8b;">DimensionProperty</span> , <span style="color: #228b22;">rdf:</span><span style="color: #008b8b;">Property</span> ;
+  <span style="color: #228b22;">rdfs:</span><span style="color: #008b8b;">label</span>   <span style="color: #8b2252;">"Percentile"</span>@en;
+  <span style="color: #228b22;">rdfs:</span><span style="color: #008b8b;">range</span>  <span style="color: #0000ff;">&lt;http://worldbank.270a.info/classification/percentile&gt;</span>;
+  <span style="color: #228b22;">qb:</span><span style="color: #008b8b;">codeList</span> <span style="color: #0000ff;">&lt;http://worldbank.270a.info/classification/percentile&gt;</span><span style="color: #228b22;">.</span>
+<span style="color: #0000ff;">&lt;http://worldbank.270a.info/classification/percentile/90&gt;</span> <span style="color: #a020f0;">a</span> <span style="color: #228b22;">skos:</span><span style="color: #008b8b;">Concept</span>;
+  <span style="color: #228b22;">skos:</span><span style="color: #008b8b;">inScheme</span> <span style="color: #0000ff;">&lt;http://worldbank.270a.info/property/percentile&gt;</span>.
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-3-2-2" class="outline-4">
+<h4 id="sec-3-2-2"><span class="section-number-4">3.2.2</span> Disco</h4>
+<div class="outline-text-4" id="text-3-2-2">
+<p>
+Disco looks very promising, and has detailed in-depth stats examples (a lot more elaborate than Cube).
+It says "Disco only describes the structure of a dataset, but is not concerned with representing the actual data in it".
+But in fact the examples show data representation as well.
+</p>
+<ul class="org-ul">
+<li><a href="http://www.ddialliance.org/Specification/RDF/Discovery">http://www.ddialliance.org/Specification/RDF/Discovery</a>
+</li>
+<li>spec:  <a href="http://rdf-vocabulary.ddialliance.org/discovery.html">http://rdf-vocabulary.ddialliance.org/discovery.html</a>
+</li>
+<li>info on Descriptive Stats:  <a href="http://rdf-vocabulary.ddialliance.org/discovery.html#dfn-disco-descriptivestatistics">http://rdf-vocabulary.ddialliance.org/discovery.html#dfn-disco-descriptivestatistics</a>
+</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-sec-3-2-3" class="outline-4">
+<h4 id="sec-3-2-3"><span class="section-number-4">3.2.3</span> DDI CV, SStat</h4>
+<div class="outline-text-4" id="text-3-2-3">
+<p>
+DDI Controlled Vocabularies provides a number of codelists for common stats concepts.
+</p>
+<ul class="org-ul">
+<li>homepage: <a href="http://www.ddialliance.org/controlled-vocabularies">http://www.ddialliance.org/controlled-vocabularies</a>
+</li>
+<li>formats: <a href="http://www.ddialliance.org/Specification/DDI-CV/">http://www.ddialliance.org/Specification/DDI-CV/</a>
+</li>
+<li>RDF format: <a href="https://github.com/linked-statistics/DDI-controlled-vocabularies">https://github.com/linked-statistics/DDI-controlled-vocabularies</a>
+</li>
+</ul>
+</div>
+<div id="outline-container-sec-3-2-3-1" class="outline-5">
+<h5 id="sec-3-2-3-1"><span class="section-number-5">3.2.3.1</span> Summary Statistics</h5>
+<div class="outline-text-5" id="text-3-2-3-1">
+<p>
+In particular, Summary Statistics is relevant for us:
+</p>
+<ul class="org-ul">
+<li>A Summary Statistic is a single number representation of the characteristics of a set of values
+</li>
+<li>Amongst others, defines: ArithmeticMean, Minimum, Maximum, Median (50 percentile), NinthDecile (90 percentile), OtherPercentile
+</li>
+<li>HTML: <a href="http://www.ddialliance.org/Specification/DDI-CV/SummaryStatisticType_2.0.html">http://www.ddialliance.org/Specification/DDI-CV/SummaryStatisticType_2.0.html</a>
+</li>
+<li>RDF: <a href="https://github.com/linked-statistics/DDI-controlled-vocabularies/blob/master/SummaryStatisticType/SummaryStatisticType_2.0.rdf">https://github.com/linked-statistics/DDI-controlled-vocabularies/blob/master/SummaryStatisticType/SummaryStatisticType_2.0.rdf</a>
+</li>
+</ul>
+<p>
+This is a promising vocabulary and is worth watching. But our current representation doesn't use it because:
+</p>
+<ul class="org-ul">
+<li>These codelists are not deployed yet (the namespace does not resolve)
+</li>
+<li>We need 95 percentile and 99 percentile but SStat defines "OtherPercentile", so we'd still need to extend or tack a number somewhere
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div id="outline-container-sec-3-2-4" class="outline-4">
+<h4 id="sec-3-2-4"><span class="section-number-4">3.2.4</span> SDMX</h4>
+<div class="outline-text-4" id="text-3-2-4">
+<p>
+SDMX is an ISO spec providing common stats concepts and components (dimensions, attributes and measures).
+Originally defined in XML and EDI, it's also translated to RDF.
+SDMX depends on Cube, but Cube may be used without SDMX.
+</p>
+
+<p>
+Since the same concept (eg Gender) can be used in various roles (eg a Dimension or a Measure), skos:Concepts are used to tie them together.
+A component that is a qb:CodedProperty may also link to a qb:codeList (a skos:ConceptScheme or ad-hoc qb:HierarchicalCodeList).
+</p>
+
+<p>
+Say we want to provide a Dimension describing Summary Stats (mean, min, max, etc).
+We define a property <code>bm-stat:dimStat</code> and tie it up to the concept <code>bm-stat:conceptStat</code> and a codeList <code>bm-stat:stat</code>:
+</p>
+<div class="org-src-container">
+
+<pre class="src src-Turtle"><span style="color: #228b22;">bm-stat:</span><span style="color: #008b8b;">dimStat</span> <span style="color: #a020f0;">a</span> <span style="color: #228b22;">rdf:</span><span style="color: #008b8b;">Property,</span> <span style="color: #228b22;">qb:</span><span style="color: #008b8b;">DimensionProperty,</span> <span style="color: #228b22;">qb:</span><span style="color: #008b8b;">CodedProperty</span>;
+  <span style="color: #228b22;">rdfs:</span><span style="color: #008b8b;">label</span> <span style="color: #8b2252;">"Stat"</span>@en;
+  <span style="color: #228b22;">rdfs:</span><span style="color: #008b8b;">comment</span> <span style="color: #8b2252;">"Statistic being measured (eg min, max)"</span>@en;
+  <span style="color: #228b22;">rdfs:</span><span style="color: #008b8b;">range</span> <span style="color: #228b22;">bm:</span><span style="color: #008b8b;">Stat</span>;
+  <span style="color: #228b22;">qb:</span><span style="color: #008b8b;">concept</span> <span style="color: #228b22;">bm-stat:</span><span style="color: #008b8b;">conceptStat</span>;
+  <span style="color: #228b22;">qb:</span><span style="color: #008b8b;">codeList</span> <span style="color: #228b22;">bm-stat:</span><span style="color: #008b8b;">stat</span>.
+</pre>
+</div>
+<p>
+We also define a class <code>bm-stat:Stat</code> that's co-extensive with the codeList <code>bm-stat:stat</code>, to allow rdfs:range declaration on the DimensionProperty:
+</p>
+<div class="org-src-container">
+
+<pre class="src src-Turtle"><span style="color: #228b22;">bm-stat:</span><span style="color: #008b8b;">stat</span> <span style="color: #a020f0;">a</span> <span style="color: #228b22;">skos:</span><span style="color: #008b8b;">ConceptScheme</span>;
+  <span style="color: #228b22;">rdfs:</span><span style="color: #008b8b;">label</span> <span style="color: #8b2252;">"Summary Statistics scheme"</span>@en;
+  <span style="color: #228b22;">rdfs:</span><span style="color: #008b8b;">comment</span> <span style="color: #8b2252;">"Single number representation of the characteristics of a set of values"</span>@en;
+  <span style="color: #228b22;">rdfs:</span><span style="color: #008b8b;">seeAlso</span> <span style="color: #228b22;">bm-stat:</span><span style="color: #008b8b;">Stat</span><span style="color: #228b22;">.</span>
+
+<span style="color: #228b22;">bm-stat:</span><span style="color: #008b8b;">Stat</span> <span style="color: #a020f0;">a</span> <span style="color: #228b22;">rdfs:</span><span style="color: #008b8b;">Class,</span> <span style="color: #228b22;">owl:</span><span style="color: #008b8b;">Class</span>;
+  <span style="color: #228b22;">rdfs:</span><span style="color: #008b8b;">label</span> <span style="color: #8b2252;">"Stat"</span>@en;
+  <span style="color: #228b22;">rdfs:</span><span style="color: #008b8b;">comment</span> <span style="color: #8b2252;">"Codelist (enumeration) of Summary Statistics concepts, eg min, max"</span>@en;
+  <span style="color: #228b22;">rdfs:</span><span style="color: #008b8b;">subClassOf</span> <span style="color: #228b22;">skos:</span><span style="color: #008b8b;">Concept</span>;
+  <span style="color: #228b22;">rdfs:</span><span style="color: #008b8b;">seeAlso</span> <span style="color: #228b22;">bm-stat:</span><span style="color: #008b8b;">stat</span>.
+</pre>
+</div>
+<p>
+Finally, we define the individual values as both instances of the class, and <code>skos:inScheme</code> of the codeList:
+</p>
+<div class="org-src-container">
+
+<pre class="src src-Turtle"><span style="color: #228b22;">bm-stat:</span><span style="color: #008b8b;">min</span> <span style="color: #a020f0;">a</span> <span style="color: #228b22;">skos:</span><span style="color: #008b8b;">Concept,</span> <span style="color: #228b22;">bm-stat:</span><span style="color: #008b8b;">Stat</span> ;
+  <span style="color: #228b22;">rdfs:</span><span style="color: #008b8b;">label</span> <span style="color: #8b2252;">"Min"</span>@en;
+  <span style="color: #228b22;">rdfs:</span><span style="color: #008b8b;">comment</span> <span style="color: #8b2252;">"Minimum value of an observation"</span>@en;
+  <span style="color: #228b22;">skos:</span><span style="color: #008b8b;">inScheme</span> <span style="color: #228b22;">bm-stat:</span><span style="color: #008b8b;">stat</span>.
+</pre>
+</div>
+
+<p>
+It is tedious to define all these interlinked entities (a consistent naming approach is essential!)
+Such detailed self-description allows sophisticated cube exploration UIs and SPARQL query generation (rumor has it).
+However, we think it would be easier to develop queries by hand, so we may forgo the use of SDMX in future releases.
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-3-2-5" class="outline-4">
+<h4 id="sec-3-2-5"><span class="section-number-4">3.2.5</span> Cube</h4>
+<div class="outline-text-4" id="text-3-2-5">
+<p>
+Cube is the "canonical" stats ontology adopted by W3C. It can work together or without SDMX.
+</p>
+<ul class="org-ul">
+<li>spec: <a href="http://www.w3.org/TR/vocab-data-cube">http://www.w3.org/TR/vocab-data-cube</a>
+</li>
+<li>domain model: <a href="http://www.w3.org/TR/vocab-data-cube/#outline">http://www.w3.org/TR/vocab-data-cube/#outline</a>
+</li>
+<li>complete example: <a href="http://www.w3.org/TR/vocab-data-cube/#full-example">http://www.w3.org/TR/vocab-data-cube/#full-example</a>
+</li>
+<li>ontologies resolve to: <a href="http://publishing-statistical-data.googlecode.com/svn/trunk/specs/src/main/vocab/">http://publishing-statistical-data.googlecode.com/svn/trunk/specs/src/main/vocab/</a>
+</li>
+<li>forum: <a href="https://groups.google.com/forum/#!topic/publishing-statistical-data">https://groups.google.com/forum/#!topic/publishing-statistical-data</a>
+</li>
+</ul>
+
+<p>
+There are many important parts to the specification, but we highlight only a couple in this section, and a more technical one in the next section.
+</p>
+<dl class="org-dl">
+<dt> <a href="http://www.w3.org/TR/vocab-data-cube/#dsd-mm">Multiple Measures</a> </dt><dd>  If you need Observations that have several different Measures, there are several approaches:
+<ul class="org-ul">
+<li><a href="http://www.w3.org/TR/vocab-data-cube/#h4_dsd-mm-obs">Multi-measure observations</a>. Each observation has the same set of measures, and attributes can't be applied separately.
+<div class="org-src-container">
+
+<pre class="src src-Turtle"><span style="color: #228b22;">eg:</span><span style="color: #008b8b;">o1</span> <span style="color: #a020f0;">a</span> <span style="color: #228b22;">ob:</span><span style="color: #008b8b;">Observation</span>;
+  <span style="color: #228b22;">eg:</span><span style="color: #008b8b;">attrUnit</span> <span style="color: #228b22;">unit:</span><span style="color: #008b8b;">MilliSecond</span>;
+  <span style="color: #228b22;">eg:</span><span style="color: #008b8b;">measure1</span> 123;
+  <span style="color: #228b22;">eg:</span><span style="color: #008b8b;">measure2</span> 456.
+</pre>
+</div>
+</li>
+<li><a href="http://www.w3.org/TR/vocab-data-cube/#h4_dsd-mm-dim">Measure dimension</a>. Each observation has one applicable measure, selected by qb:measureType (as a tag/discriminator in a in a <a href="https://en.wikipedia.org/wiki/Tagged_union">Tagged Union</a>).
+Different attributes can be applied. This is a more regular approach, recommended by SDMX.
+<div class="org-src-container">
+
+<pre class="src src-Turtle"><span style="color: #228b22;">eg:</span><span style="color: #008b8b;">o1</span> <span style="color: #a020f0;">a</span> <span style="color: #228b22;">ob:</span><span style="color: #008b8b;">Observation</span>;
+  <span style="color: #228b22;">eg:</span><span style="color: #008b8b;">attrUnit</span> <span style="color: #228b22;">unit:</span><span style="color: #008b8b;">MilliSecond</span>;
+  <span style="color: #228b22;">qb:</span><span style="color: #008b8b;">measureType</span> <span style="color: #228b22;">eg:</span><span style="color: #008b8b;">measure1</span>;
+  <span style="color: #228b22;">eg:</span><span style="color: #008b8b;">measure1</span> <span style="color: #228b22;">123.</span>
+<span style="color: #228b22;">eg:</span><span style="color: #008b8b;">o2</span> <span style="color: #a020f0;">a</span> <span style="color: #228b22;">ob:</span><span style="color: #008b8b;">Observation</span>;
+  <span style="color: #228b22;">eg:</span><span style="color: #008b8b;">attrUnit</span> <span style="color: #228b22;">unit:</span><span style="color: #008b8b;">Second</span>;
+  <span style="color: #228b22;">qb:</span><span style="color: #008b8b;">measureType</span> <span style="color: #228b22;">eg:</span><span style="color: #008b8b;">measure2</span>;
+  <span style="color: #228b22;">eg:</span><span style="color: #008b8b;">measure2</span> 456.
+</pre>
+</div>
+</li>
+<li>Structured observation. You could put several values in one node, but then cannot Slice them independently
+<div class="org-src-container">
+
+<pre class="src src-Turtle"><span style="color: #228b22;">eg:</span><span style="color: #008b8b;">o1</span> <span style="color: #a020f0;">a</span> <span style="color: #228b22;">ob:</span><span style="color: #008b8b;">Observation</span>;
+  <span style="color: #228b22;">eg:</span><span style="color: #008b8b;">attrUnit</span> <span style="color: #228b22;">unit:</span><span style="color: #008b8b;">MilliSecond</span>;
+  <span style="color: #228b22;">eg:</span><span style="color: #008b8b;">measure</span> <span style="color: #228b22;">[eg:</span><span style="color: #008b8b;">value1</span> 123; <span style="color: #228b22;">eg:</span><span style="color: #008b8b;">value2</span> 456].
+</pre>
+</div>
+</li>
+</ul>
+</dd>
+<dt> <a href="http://www.w3.org/TR/vocab-data-cube/#dsd-dsd">Data Structure Definition</a> (DSD) </dt><dd>  The structure of a Cube is described with a DSD.
+The same DSD is normally reused between many Cubes with the same structure
+(eg a SNB DSD will be used by the stats cubes of all SNB Runs).
+A DSD is created by listing the qb:components that apply to a cube, and optionally defining <a href="http://www.w3.org/TR/vocab-data-cube/#slices">SliceKeys</a>.
+Consistent naming of different kinds of components (eg dim, attr, meas) is essential to facilitate understanding. Eg
+<div class="org-src-container">
+
+<pre class="src src-Turtle"><span style="color: #228b22;">snb-stat:</span><span style="color: #008b8b;">dsd</span> <span style="color: #a020f0;">a</span> <span style="color: #228b22;">qb:</span><span style="color: #008b8b;">DataStructureDefinition</span>;
+  <span style="color: #228b22;">ob:</span><span style="color: #008b8b;">component</span> <span style="color: #228b22;">[qb:</span><span style="color: #008b8b;">dimension</span> <span style="color: #228b22;">bm-stat:</span><span style="color: #008b8b;">dimScaleFactor],</span>  <span style="color: #b22222;"># dataset size</span>
+  <span style="color: #228b22;">ob:</span><span style="color: #008b8b;">component</span> <span style="color: #228b22;">[qb:</span><span style="color: #008b8b;">dimension</span> <span style="color: #228b22;">bm-stat:</span><span style="color: #008b8b;">dimStat],</span>         <span style="color: #b22222;"># mean, min, max, ...</span>
+  <span style="color: #228b22;">ob:</span><span style="color: #008b8b;">component</span> <span style="color: #228b22;">[qb:</span><span style="color: #008b8b;">attribute</span> <span style="color: #228b22;">bm-stat:</span><span style="color: #008b8b;">attrUnit],</span>        <span style="color: #b22222;"># MilliSecond, Second, ...</span>
+  <span style="color: #228b22;">ob:</span><span style="color: #008b8b;">component</span> <span style="color: #228b22;">[qb:</span><span style="color: #008b8b;">dimension</span> <span style="color: #228b22;">qb:</span><span style="color: #008b8b;">measureType],</span>          <span style="color: #b22222;"># discriminator for the rest</span>
+  <span style="color: #228b22;">ob:</span><span style="color: #008b8b;">component</span> <span style="color: #228b22;">[qb:</span><span style="color: #008b8b;">measure</span>   <span style="color: #228b22;">bm-stat:</span><span style="color: #008b8b;">measRuntime],</span>     <span style="color: #b22222;"># observe Runtime, or</span>
+  <span style="color: #228b22;">ob:</span><span style="color: #008b8b;">component</span> <span style="color: #228b22;">[qb:</span><span style="color: #008b8b;">measure</span>   <span style="color: #228b22;">bm-stat:</span><span style="color: #008b8b;">measDelayTime]</span>.   <span style="color: #b22222;"># observe DelayTime</span>
+</pre>
+</div>
+</dd>
+<dt> componentAttachment </dt><dd>  Every Observation must have defined values for all Dimensions and all mandatory Attributes.
+However, Cube allows some shortcuts by letting you specify a Dimension/Attribute
+at the level of the cube, slice, or a Measure.
+This last option is unclear in the spec, see my <a href="https://groups.google.com/forum/#!topic/publishing-statistical-data/NZcaUhMu0_k">forum posting</a> and the next section.
+</dd>
+</dl>
+</div>
+</div>
+
+<div id="outline-container-sec-3-2-6" class="outline-4">
+<h4 id="sec-3-2-6"><span class="section-number-4">3.2.6</span> Cube Normalization</h4>
+<div class="outline-text-4" id="text-3-2-6">
+<p>
+If you specify property <code>qb:componentAttachment</code> with of the values <code>qb:DataSet</code>, <code>qb:Slice</code>, <code>qb:MeasureProperty</code>
+for a Dimension/Attribute, then you fix the value for that Dimension/Attribute at the corresponding higher level, not in the Observation.
+For example (not showing <code>qb:DataSet</code> for brevity):
+</p>
+<div class="org-src-container">
+
+<pre class="src src-Turtle"><span style="color: #228b22;">eg:</span><span style="color: #008b8b;">myDSD</span> <span style="color: #a020f0;">a</span> <span style="color: #228b22;">qb:</span><span style="color: #008b8b;">DataStructureDefinition</span>;
+  <span style="color: #228b22;">qb:</span><span style="color: #008b8b;">component</span> <span style="color: #228b22;">[qb:</span><span style="color: #008b8b;">measure</span> <span style="color: #228b22;">eg:</span><span style="color: #008b8b;">measure1</span> ];
+  <span style="color: #228b22;">qb:</span><span style="color: #008b8b;">component</span> <span style="color: #228b22;">[qb:</span><span style="color: #008b8b;">measure</span> <span style="color: #228b22;">eg:</span><span style="color: #008b8b;">measure2</span> ];
+  <span style="color: #228b22;">qb:</span><span style="color: #008b8b;">component</span> <span style="color: #228b22;">[qb:</span><span style="color: #008b8b;">attribute</span> <span style="color: #228b22;">eg:</span><span style="color: #008b8b;">measUnit</span>; <span style="color: #228b22;">qb:</span><span style="color: #008b8b;">componentAttachment</span> <span style="color: #228b22;">qb:</span><span style="color: #008b8b;">MeasureProperty]</span><span style="color: #228b22;">.</span>
+
+<span style="color: #228b22;">eg:</span><span style="color: #008b8b;">measure1</span> <span style="color: #a020f0;">a</span> <span style="color: #228b22;">qb:</span><span style="color: #008b8b;">MeasureProperty</span>;
+  <span style="color: #228b22;">eg:</span><span style="color: #008b8b;">measUnit</span> <span style="color: #228b22;">unit:</span><span style="color: #008b8b;">Percent</span> <span style="color: #228b22;">.</span>
+
+<span style="color: #228b22;">eg:</span><span style="color: #008b8b;">measure2</span> <span style="color: #a020f0;">a</span> <span style="color: #228b22;">qb:</span><span style="color: #008b8b;">MeasureProperty</span>;
+  <span style="color: #228b22;">eg:</span><span style="color: #008b8b;">measUnit</span> <span style="color: #228b22;">unit:</span><span style="color: #008b8b;">Number</span> <span style="color: #228b22;">.</span>
+
+<span style="color: #228b22;">eg:</span><span style="color: #008b8b;">observation1</span> <span style="color: #a020f0;">a</span> <span style="color: #228b22;">qb:</span><span style="color: #008b8b;">Observation</span>;
+  <span style="color: #228b22;">eg:</span><span style="color: #008b8b;">measure1</span> 55;   <span style="color: #b22222;"># Percent</span>
+  <span style="color: #228b22;">eg:</span><span style="color: #008b8b;">measure2</span> 1333. <span style="color: #b22222;"># Number</span>
+</pre>
+</div>
+
+<p>
+This allows abbreviated (more economical) cube representation.
+But to simplify SPARQL queries and Integrity constraint checking,
+a <a href="http://www.w3.org/TR/vocab-data-cube/#normalize-algorithm">Normalization Algorithm</a> is defined that expands (flattens) the cube by transferring the values from the higher level to each Observation.
+</p>
+
+<p>
+The algorithm is defined in terms of SPARQL updates (INSERT WHERE).
+</p>
+<ul class="org-ul">
+<li>Phase 1 are normal RDFS rules
+</li>
+<li>Phase 2 are the Cube-specific rules.
+</li>
+</ul>
+<p>
+Unfortunately, the above case won't be handled by Phase 2, since it shows only attachment to qb:DataSet or qb:Slice.
+</p>
+
+<p>
+We find an extra fourth rule <b>commented-out</b> at the original source
+<a href="https://code.google.com/p/publishing-statistical-data/source/browse/trunk/src/main/resources/flatten.ru">https://code.google.com/p/publishing-statistical-data/source/browse/trunk/src/main/resources/flatten.ru</a>
+(in this case ru is the extension for SPARQL Update):
+</p>
+<div class="org-src-container">
+
+<pre class="src src-SPARQL"><span style="color: #b22222;"># Measure property attachments</span>
+  INSERT {
+      ?obs  ?comp ?value
+  } WHERE {
+      ?spec  <span style="color: #228b22;">qb:</span><span style="color: #008b8b;">componentProperty</span> ?comp ;
+             <span style="color: #228b22;">qb:</span><span style="color: #008b8b;">componentAttachment</span> <span style="color: #228b22;">qb:</span><span style="color: #008b8b;">MeasureProperty</span> .
+      ?dataset <span style="color: #228b22;">qb:</span><span style="color: #008b8b;">structure</span> <span style="color: #228b22;">[qb:</span><span style="color: #008b8b;">component</span> ?spec] .
+      ?comp    <span style="color: #a020f0;">a</span> <span style="color: #228b22;">qb:</span><span style="color: #008b8b;">AttributeProperty</span> .
+      ?measure <span style="color: #a020f0;">a</span> <span style="color: #228b22;">qb:</span><span style="color: #008b8b;">MeasureProperty</span>;
+               ?comp ?value .
+      ?obs     <span style="color: #228b22;">qb:</span><span style="color: #008b8b;">dataSet</span> ?dataset;
+               ?measure [] .
+  }
+</pre>
+</div>
+<p>
+It transfers from a Measure to an Observation, iff:
+</p>
+<ul class="org-ul">
+<li>An Attribute <code>?comp</code> is attached to a MeasureProperty,
+</li>
+<li>The Measure is used for the Observation
+</li>
+<li>The attribute is declared to have <code>qb:componentAttachment qb:MeasureProperty</code>. To see
+this, it helps to rewrite the WHERE clause like this
+(<code>qb:component</code> is super-property of <code>qb:attribute</code>):
+<div class="org-src-container">
+
+<pre class="src src-SPARQL">?dataset <span style="color: #228b22;">qb:</span><span style="color: #008b8b;">structure</span> [<span style="color: #a020f0;">a</span> <span style="color: #228b22;">qb:</span><span style="color: #008b8b;">DataStructureDefinition</span>;
+  <span style="color: #228b22;">qb:</span>component
+    <span style="color: #228b22;">[qb:</span><span style="color: #008b8b;">attribute</span> ?attr; <span style="color: #228b22;">qb:</span><span style="color: #008b8b;">componentAttachment</span> <span style="color: #228b22;">qb:</span><span style="color: #008b8b;">MeasureProperty]]</span>.
+?attr    <span style="color: #a020f0;">a</span> <span style="color: #228b22;">qb:</span><span style="color: #008b8b;">AttributeProperty</span> .
+?measure <span style="color: #a020f0;">a</span> <span style="color: #228b22;">qb:</span><span style="color: #008b8b;">MeasureProperty</span>;
+  ?attr ?value .
+?obs <span style="color: #a020f0;">a</span> <span style="color: #228b22;">qb:</span><span style="color: #008b8b;">Observation</span>;
+  <span style="color: #228b22;">qb:</span><span style="color: #008b8b;">dataSet</span> ?dataset;
+  ?measure ?measValue.
+</pre>
+</div>
+</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-sec-3-2-7" class="outline-4">
+<h4 id="sec-3-2-7"><span class="section-number-4">3.2.7</span> Normalization with Ontotext GraphDb Rules</h4>
+<div class="outline-text-4" id="text-3-2-7">
+<p>
+INSERT WHERE works fine for static/small datasets, but what if you have a huge Cube that's updated incrementally?
+(Eg a cube to which observations are being added by a streaming benchmark driver).
+Ontotext GraphDb rules work better in such situation, since they allow you to insert and delete triples freely, while maintaining consistency.
+</p>
+
+<p>
+The script <a href="./cube-normalize.pl">./cube-normalize.pl</a> takes a .ru file as described above and produces a rule
+file <a href="./cube-normalize.pie">./cube-normalize.pie</a> (in addition, a RDFS rules file needs to be loaded or merged with this one).
+Eg the <b>Measure property attachments</b> INSERT WHERE rule from the previous section is translated to this rule:
+</p>
+<pre class="example">
+Id: qb2_Measure_property_attachments
+  spec  &lt;qb:componentProperty&gt; comp
+  spec  &lt;qb:componentAttachment&gt; &lt;qb:MeasureProperty&gt;
+  dataset &lt;qb:structure&gt; struc
+  struc   &lt;qb:component&gt; spec
+  comp    &lt;rdf:type&gt; &lt;qb:AttributeProperty&gt;
+  measure &lt;rdf:type&gt; &lt;qb:MeasureProperty&gt;
+  measure comp value
+  obs     &lt;qb:dataSet&gt; dataset
+  obs     measure blank
+  --------------------------
+  obs  comp value
+</pre>
+<p>
+In addition, it adds an inverse propertyChainAxiom for the loop between DataSet, Slice and Observation (see the Cube <a href="http://www.w3.org/TR/vocab-data-cube/#outline">domain model</a>):
+</p>
+<pre class="example">
+Id: qbX_slice_observation_dataSet
+  dataset &lt;qb:slice&gt;       slice
+  slice   &lt;qb:observation&gt; obs
+  --------------------------------
+  obs     &lt;qb:dataSet&gt;     dataset
+</pre>
+<p>
+This allows you to skip <code>qb:dataSet</code> for an Observation that's already attached to a Slice of the cube using <code>qb:observation</code>.
+</p>
+
+<p>
+Note: "qb2" stands for "Cube Phase2 normalization", and "qbX" stands for "I'm too lazy to repeat myself".
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-3-2-8" class="outline-4">
+<h4 id="sec-3-2-8"><span class="section-number-4">3.2.8</span> Benchmark Result Dimensions</h4>
+<div class="outline-text-4" id="text-3-2-8">
+<p>
+We will document all particulars of a benchmark run in <code>bm:Run</code>, including:
+</p>
+<ul class="org-ul">
+<li>Full hardware and software details of the System Under Test
+</li>
+<li>URLs of configuration files of the System Under Test, test driver, etc
+</li>
+<li>RDF nodes with property-value for important configuration parameters
+</li>
+</ul>
+<p>
+In contrast, the Benchmark Result examples (eg <a href="#sec-3-3-1">3.3.1</a> below) as of <span class="timestamp-wrapper"><span class="timestamp">&lt;2015-01-21&gt;</span></span> use a really minimal set of dimensions:
+</p>
+<ul class="org-ul">
+<li><code>dimQuery</code> states which query (or Total) the measurement pertains to
+</li>
+<li><code>dimStat</code> states which Summary Statistic <a href="#sec-3-2-3-1">3.2.3.1</a> (eg mean, min, max) is expressed by the measurement
+</li>
+</ul>
+<p>
+To compare or chart numbers across different Runs (varying eg database, release, database settings, hardware, benchmark version), 
+we need to use more of the Run parameters as cube Dimensions.
+</p>
+
+<p>
+The down-side of every dimension is that it not only adds a triple to every observation,
+but also multiplies the number of observations through Cube Normalization <a href="#sec-3-2-6">3.2.6</a>.
+Eg assume you have a cube with D dimensions, O observations and (D+X)*O triples (where X is proportional to the number of measures and attributes)
+and you add an D+1'th dimension with Y values.
+You'll end up with O*Y observations and (D+X+1)*O*Y triples.
+</p>
+
+<p>
+So what are the important benchmark Run parameters to add as Dimensions? Currently proposed:
+</p>
+<ul class="org-ul">
+<li>scaleFactor: to compare performance against dataset size
+</li>
+<li>database release: to compare the evolution of a database in time
+</li>
+<li>database: to compare across databases (note: this is implied by "database release", so we could spare it)
+</li>
+<li>RAM size (Gb): a key hardware parameter
+</li>
+</ul>
+
+<p>
+How about these?
+</p>
+<ul class="org-ul">
+<li>Loading parameters such as number of agents/threads (SNB threadCount), SNB timeCompressionRatio, SNB gctDeltaDuration. 
+IMHO the benchmark sponsor is supposed to optimize these until maximum database performance is achieved, so we don't compare across them
+</li>
+<li>CPU and Disk performance. But is there a standardized way to report them?
+</li>
+<li>query mix, eg which queries are enabled, whether analytical queries were included, query interleave times, etc.
+The number and times for each query type are reported through <code>dimQuery</code>, 
+but the mix as a whole also affects the performance of each query, so maybe we need to capture this.
+But how? A query mix is a complex structure in itself&#x2026;
+</li>
+<li>SUT platform such as operating system, JVM etc: it's possible (but maybe not very likely) we'd want to compare against such factors
+</li>
+<li>Total SUT price. TCP captures that (and queries per second per dollar), so maybe we should too
+</li>
+</ul>
+
+<p>
+In contrast, we don't need to capture the folowing as Dimensions:
+</p>
+<ul class="org-ul">
+<li>benchmark: can't compare across benchmarks (can't compare apples to oranges)
+</li>
+<li>benchmark version: this is a key parameter of a Run, but again we can't compare apples to oranges
+</li>
+<li>driver version: an important parameter of a Run, but it's not supposed to affect benchmark performance
+</li>
+<li>dataset parameters such as dictionaries used, network distributions, literal distributions, etc.
+</li>
+</ul>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-3-3" class="outline-3">
+<h3 id="sec-3-3"><span class="section-number-3">3.3</span> SNB Sample1</h3>
+<div class="outline-text-3" id="text-3-3">
+<p>
+The SNB spec <a href="https://github.com/ldbc/ldbc_snb_docs/blob/master/LDBC_SNB_v0.2.0.pdf">LDBC_SNB_v0.2.0</a> sec 3.3 "Gathering the results" provides the example <a href="./snb-sample1.json">./snb-sample1.json</a>:
+</p>
+<div class="org-src-container">
+
+<pre class="src src-js"><span style="color: #8b2252;">"name"</span>: <span style="color: #8b2252;">"Query1"</span>,
+<span style="color: #8b2252;">"count"</span>: 50,
+<span style="color: #8b2252;">"unit"</span>: <span style="color: #8b2252;">"MILLISECONDS"</span>,
+<span style="color: #8b2252;">"run_time"</span>: {
+  <span style="color: #8b2252;">"name"</span>: <span style="color: #8b2252;">"Runtime"</span>,
+  <span style="color: #8b2252;">"unit"</span>: <span style="color: #8b2252;">"MILLISECONDS"</span>,
+  <span style="color: #8b2252;">"count"</span>: 50,
+  <span style="color: #8b2252;">"mean"</span>: 100,
+  <span style="color: #8b2252;">"min"</span>: 2,
+  <span style="color: #8b2252;">"max"</span>: 450,
+  <span style="color: #8b2252;">"50th_percentile"</span>: 98,
+  <span style="color: #8b2252;">"90th_percentile"</span>: 129,
+  <span style="color: #8b2252;">"95th_percentile"</span>: 432,
+  <span style="color: #8b2252;">"99th_percentile"</span>: 444
+},
+<span style="color: #8b2252;">"start_time_delay"</span>: {
+  <span style="color: #8b2252;">"name"</span>: <span style="color: #8b2252;">"Start Time Delay"</span>,
+  <span style="color: #8b2252;">"unit"</span>: <span style="color: #8b2252;">"MILLISECONDS"</span>,
+  <span style="color: #8b2252;">"count"</span>: 7,
+  <span style="color: #8b2252;">"mean"</span>: 3.5714285714285716,
+  <span style="color: #8b2252;">"min"</span>: 0,
+  <span style="color: #8b2252;">"max"</span>: 25,
+  <span style="color: #8b2252;">"50th_percentile"</span>: 0,
+  <span style="color: #8b2252;">"90th_percentile"</span>: 0,
+  <span style="color: #8b2252;">"95th_percentile"</span>: 25,
+  <span style="color: #8b2252;">"99th_percentile"</span>: 25
+},
+<span style="color: #8b2252;">"result_code"</span>: {
+  <span style="color: #8b2252;">"name"</span>: <span style="color: #8b2252;">"Result Code"</span>,
+  <span style="color: #8b2252;">"unit"</span>: <span style="color: #8b2252;">"Result Code"</span>,
+  <span style="color: #8b2252;">"count"</span>: 50,
+  <span style="color: #8b2252;">"all_values"</span>: {
+    <span style="color: #8b2252;">"0"</span>: 42,
+    <span style="color: #8b2252;">"1"</span>: 8
+  }
+}
+</pre>
+</div>
+<p>
+It provides stats for 50 executions of Query1 along 3 measures:
+</p>
+<ul class="org-ul">
+<li>Runtime: query execution time
+</li>
+<li>StartDelay: delay between scheduled and actual query start time.
+</li>
+<li>Result: result code
+</li>
+</ul>
+
+<p>
+Note: queries are scheduled by the driver using these parameters:
+</p>
+<ul class="org-ul">
+<li>LdbcQueryN_interleave: interval between successive executions of query N
+</li>
+<li>timeCompressionRatio: multiplier to compress/stretch all interleave times
+</li>
+<li>toleratedExecutionDelay: if start delay exceeds this, a timeout is recorded
+</li>
+</ul>
+
+<p>
+These measures are interesting, since:
+</p>
+<ul class="org-ul">
+<li>We have 2 numeric measures (MilliSeconds) and 1 categorial (result code)
+</li>
+<li>The numeric measures provide a number of Summary Statistics
+</li>
+</ul>
+</div>
+
+<div id="outline-container-sec-3-3-1" class="outline-4">
+<h4 id="sec-3-3-1"><span class="section-number-4">3.3.1</span> SNB Turtle</h4>
+<div class="outline-text-4" id="text-3-3-1">
+<p>
+We represent this as the following Turtle.
+</p>
+<ul class="org-ul">
+<li>We populate the cube using 3 Slices, each having the same structure <code>snb-stat:sliceByQueryAndMeasure</code>
+</li>
+<li>We model the Summary Statistics as Dimension (<code>bm-stat:dimStat</code>), and the unit-of-measure as Attribute (<code>bm-stat:attrUnit</code>)
+</li>
+<li>For the categorial measure <code>snb-stat:measResult</code> we model the individual categories (code values) as Attrbute (<code>bm-stat:attrResult</code>)
+</li>
+</ul>
+<div class="org-src-container">
+
+<pre class="src src-Turtle"><span style="color: #228b22;">snb-run:</span><span style="color: #008b8b;">sample1-cube</span> <span style="color: #a020f0;">a</span> <span style="color: #228b22;">qb:</span><span style="color: #008b8b;">DataSet</span>;
+  <span style="color: #228b22;">qb:</span><span style="color: #008b8b;">structure</span> <span style="color: #228b22;">snb-stat:</span><span style="color: #008b8b;">dsdCube</span>;
+  <span style="color: #228b22;">qb:</span><span style="color: #008b8b;">slice</span> <span style="color: #228b22;">snb-run:</span><span style="color: #008b8b;">sample1-sliceRuntime,</span> <span style="color: #228b22;">snb-run:</span><span style="color: #008b8b;">sample1-sliceStartDelay,</span> <span style="color: #228b22;">snb-run:</span><span style="color: #008b8b;">sample1-sliceResult</span><span style="color: #228b22;">.</span>
+
+<span style="color: #228b22;">snb-run:</span><span style="color: #008b8b;">sample1-sliceRuntime</span> <span style="color: #a020f0;">a</span> <span style="color: #228b22;">qb:</span><span style="color: #008b8b;">Slice</span>;
+  <span style="color: #228b22;">qb:</span><span style="color: #008b8b;">sliceStructure</span> <span style="color: #228b22;">snb-stat:</span><span style="color: #008b8b;">sliceByQueryAndMeasure</span>;
+  <span style="color: #228b22;">snb-stat:</span><span style="color: #008b8b;">dimQuery</span> <span style="color: #228b22;">snb:</span><span style="color: #008b8b;">Query1</span>;
+  <span style="color: #228b22;">qb:</span><span style="color: #008b8b;">measureType</span> <span style="color: #228b22;">qb:</span><span style="color: #008b8b;">measRuntime</span>;
+  <span style="color: #228b22;">qb:</span>observation
+    [ <span style="color: #228b22;">bm-stat:</span><span style="color: #008b8b;">dimStat</span> <span style="color: #228b22;">bm-stat:</span><span style="color: #008b8b;">count</span>;        <span style="color: #228b22;">bm-stat:</span><span style="color: #008b8b;">measRuntime</span>  50; <span style="color: #228b22;">bm-stat:</span><span style="color: #008b8b;">attrUnit</span> <span style="color: #228b22;">unit:</span><span style="color: #008b8b;">Number</span>      ],
+    [ <span style="color: #228b22;">bm-stat:</span><span style="color: #008b8b;">dimStat</span> <span style="color: #228b22;">bm-stat:</span><span style="color: #008b8b;">mean</span>;         <span style="color: #228b22;">bm-stat:</span><span style="color: #008b8b;">measRuntime</span> 100; <span style="color: #228b22;">bm-stat:</span><span style="color: #008b8b;">attrUnit</span> <span style="color: #228b22;">unit:</span><span style="color: #008b8b;">MilliSecond</span> ],
+    [ <span style="color: #228b22;">bm-stat:</span><span style="color: #008b8b;">dimStat</span> <span style="color: #228b22;">bm-stat:</span><span style="color: #008b8b;">min</span>;          <span style="color: #228b22;">bm-stat:</span><span style="color: #008b8b;">measRuntime</span>   2; <span style="color: #228b22;">bm-stat:</span><span style="color: #008b8b;">attrUnit</span> <span style="color: #228b22;">unit:</span><span style="color: #008b8b;">MilliSecond</span> ],
+    [ <span style="color: #228b22;">bm-stat:</span><span style="color: #008b8b;">dimStat</span> <span style="color: #228b22;">bm-stat:</span><span style="color: #008b8b;">max</span>;          <span style="color: #228b22;">bm-stat:</span><span style="color: #008b8b;">measRuntime</span> 450; <span style="color: #228b22;">bm-stat:</span><span style="color: #008b8b;">attrUnit</span> <span style="color: #228b22;">unit:</span><span style="color: #008b8b;">MilliSecond</span> ],
+    [ <span style="color: #228b22;">bm-stat:</span><span style="color: #008b8b;">dimStat</span> <span style="color: #228b22;">bm-stat:</span><span style="color: #008b8b;">median</span>;       <span style="color: #228b22;">bm-stat:</span><span style="color: #008b8b;">measRuntime</span>  98; <span style="color: #228b22;">bm-stat:</span><span style="color: #008b8b;">attrUnit</span> <span style="color: #228b22;">unit:</span><span style="color: #008b8b;">MilliSecond</span> ],
+    [ <span style="color: #228b22;">bm-stat:</span><span style="color: #008b8b;">dimStat</span> <span style="color: #228b22;">bm-stat:</span><span style="color: #008b8b;">percentile90</span>; <span style="color: #228b22;">bm-stat:</span><span style="color: #008b8b;">measRuntime</span> 129; <span style="color: #228b22;">bm-stat:</span><span style="color: #008b8b;">attrUnit</span> <span style="color: #228b22;">unit:</span><span style="color: #008b8b;">MilliSecond</span> ],
+    [ <span style="color: #228b22;">bm-stat:</span><span style="color: #008b8b;">dimStat</span> <span style="color: #228b22;">bm-stat:</span><span style="color: #008b8b;">percentile95</span>; <span style="color: #228b22;">bm-stat:</span><span style="color: #008b8b;">measRuntime</span> 432; <span style="color: #228b22;">bm-stat:</span><span style="color: #008b8b;">attrUnit</span> <span style="color: #228b22;">unit:</span><span style="color: #008b8b;">MilliSecond</span> ],
+    [ <span style="color: #228b22;">bm-stat:</span><span style="color: #008b8b;">dimStat</span> <span style="color: #228b22;">bm-stat:</span><span style="color: #008b8b;">percentile99</span>; <span style="color: #228b22;">bm-stat:</span><span style="color: #008b8b;">measRuntime</span> 444; <span style="color: #228b22;">bm-stat:</span><span style="color: #008b8b;">attrUnit</span> <span style="color: #228b22;">unit:</span><span style="color: #008b8b;">MilliSecond</span> <span style="color: #228b22;">].</span>
+
+<span style="color: #228b22;">snb-run:</span><span style="color: #008b8b;">sample1-sliceStartDelay</span> <span style="color: #a020f0;">a</span> <span style="color: #228b22;">qb:</span><span style="color: #008b8b;">Slice</span>;
+  <span style="color: #228b22;">qb:</span><span style="color: #008b8b;">sliceStructure</span> <span style="color: #228b22;">snb-stat:</span><span style="color: #008b8b;">sliceByQueryAndMeasure</span>;
+  <span style="color: #228b22;">snb-stat:</span><span style="color: #008b8b;">dimQuery</span> <span style="color: #228b22;">snb:</span><span style="color: #008b8b;">Query1</span>;
+  <span style="color: #228b22;">qb:</span><span style="color: #008b8b;">measureType</span> <span style="color: #228b22;">snb-stat:</span><span style="color: #008b8b;">measStartDelay</span>;
+  <span style="color: #228b22;">qb:</span>observation
+    [ <span style="color: #228b22;">bm-stat:</span><span style="color: #008b8b;">dimStat</span> <span style="color: #228b22;">bm-stat:</span><span style="color: #008b8b;">count</span>;        <span style="color: #228b22;">bm-stat:</span><span style="color: #008b8b;">measStartDelay</span>  7;    <span style="color: #228b22;">bm-stat:</span><span style="color: #008b8b;">attrUnit</span> <span style="color: #228b22;">unit:</span><span style="color: #008b8b;">Number</span>      ],
+    [ <span style="color: #228b22;">bm-stat:</span><span style="color: #008b8b;">dimStat</span> <span style="color: #228b22;">bm-stat:</span><span style="color: #008b8b;">mean</span>;         <span style="color: #228b22;">bm-stat:</span><span style="color: #008b8b;">measStartDelay</span>  3.57; <span style="color: #228b22;">bm-stat:</span><span style="color: #008b8b;">attrUnit</span> <span style="color: #228b22;">unit:</span><span style="color: #008b8b;">MilliSecond</span> ],
+    [ <span style="color: #228b22;">bm-stat:</span><span style="color: #008b8b;">dimStat</span> <span style="color: #228b22;">bm-stat:</span><span style="color: #008b8b;">min</span>;          <span style="color: #228b22;">bm-stat:</span><span style="color: #008b8b;">measStartDelay</span>  0;    <span style="color: #228b22;">bm-stat:</span><span style="color: #008b8b;">attrUnit</span> <span style="color: #228b22;">unit:</span><span style="color: #008b8b;">MilliSecond</span> ],
+    [ <span style="color: #228b22;">bm-stat:</span><span style="color: #008b8b;">dimStat</span> <span style="color: #228b22;">bm-stat:</span><span style="color: #008b8b;">max</span>;          <span style="color: #228b22;">bm-stat:</span><span style="color: #008b8b;">measStartDelay</span> 25;    <span style="color: #228b22;">bm-stat:</span><span style="color: #008b8b;">attrUnit</span> <span style="color: #228b22;">unit:</span><span style="color: #008b8b;">MilliSecond</span> ],
+    [ <span style="color: #228b22;">bm-stat:</span><span style="color: #008b8b;">dimStat</span> <span style="color: #228b22;">bm-stat:</span><span style="color: #008b8b;">median</span>;       <span style="color: #228b22;">bm-stat:</span><span style="color: #008b8b;">measStartDelay</span>  0;    <span style="color: #228b22;">bm-stat:</span><span style="color: #008b8b;">attrUnit</span> <span style="color: #228b22;">unit:</span><span style="color: #008b8b;">MilliSecond</span> ],
+    [ <span style="color: #228b22;">bm-stat:</span><span style="color: #008b8b;">dimStat</span> <span style="color: #228b22;">bm-stat:</span><span style="color: #008b8b;">percentile90</span>; <span style="color: #228b22;">bm-stat:</span><span style="color: #008b8b;">measStartDelay</span>  0;    <span style="color: #228b22;">bm-stat:</span><span style="color: #008b8b;">attrUnit</span> <span style="color: #228b22;">unit:</span><span style="color: #008b8b;">MilliSecond</span> ],
+    [ <span style="color: #228b22;">bm-stat:</span><span style="color: #008b8b;">dimStat</span> <span style="color: #228b22;">bm-stat:</span><span style="color: #008b8b;">percentile95</span>; <span style="color: #228b22;">bm-stat:</span><span style="color: #008b8b;">measStartDelay</span> 25;    <span style="color: #228b22;">bm-stat:</span><span style="color: #008b8b;">attrUnit</span> <span style="color: #228b22;">unit:</span><span style="color: #008b8b;">MilliSecond</span> ],
+    [ <span style="color: #228b22;">bm-stat:</span><span style="color: #008b8b;">dimStat</span> <span style="color: #228b22;">bm-stat:</span><span style="color: #008b8b;">percentile99</span>; <span style="color: #228b22;">bm-stat:</span><span style="color: #008b8b;">measStartDelay</span> 25;    <span style="color: #228b22;">bm-stat:</span><span style="color: #008b8b;">attrUnit</span> <span style="color: #228b22;">unit:</span><span style="color: #008b8b;">MilliSecond</span> <span style="color: #228b22;">].</span>
+
+<span style="color: #228b22;">snb-run:</span><span style="color: #008b8b;">sample1-sliceResult</span> <span style="color: #a020f0;">a</span> <span style="color: #228b22;">qb:</span><span style="color: #008b8b;">Slice</span>;
+  <span style="color: #228b22;">qb:</span><span style="color: #008b8b;">sliceStructure</span> <span style="color: #228b22;">snb-stat:</span><span style="color: #008b8b;">sliceByQueryAndMeasure</span>;
+  <span style="color: #228b22;">snb-stat:</span><span style="color: #008b8b;">dimQuery</span> <span style="color: #228b22;">snb:</span><span style="color: #008b8b;">Query1</span>;
+  <span style="color: #228b22;">qb:</span><span style="color: #008b8b;">measureType</span> <span style="color: #228b22;">snb-stat:</span><span style="color: #008b8b;">measResult</span>;
+  <span style="color: #228b22;">qb:</span>observation
+    [ <span style="color: #228b22;">bm-stat:</span><span style="color: #008b8b;">dimStat</span> <span style="color: #228b22;">bm-stat:</span><span style="color: #008b8b;">count</span>; <span style="color: #228b22;">bm-stat:</span><span style="color: #008b8b;">measResult</span> 50;  <span style="color: #228b22;">bm-stat:</span><span style="color: #008b8b;">attrResult</span> <span style="color: #228b22;">snb-stat:</span><span style="color: #008b8b;">result-total</span> ],
+    [ <span style="color: #228b22;">bm-stat:</span><span style="color: #008b8b;">dimStat</span> <span style="color: #228b22;">bm-stat:</span><span style="color: #008b8b;">count</span>; <span style="color: #228b22;">bm-stat:</span><span style="color: #008b8b;">measResult</span> 42;  <span style="color: #228b22;">bm-stat:</span><span style="color: #008b8b;">attrResult</span> <span style="color: #228b22;">snb-stat:</span><span style="color: #008b8b;">result-0</span> ],
+    [ <span style="color: #228b22;">bm-stat:</span><span style="color: #008b8b;">dimStat</span> <span style="color: #228b22;">bm-stat:</span><span style="color: #008b8b;">count</span>; <span style="color: #228b22;">bm-stat:</span><span style="color: #008b8b;">measResult</span>  8;  <span style="color: #228b22;">bm-stat:</span><span style="color: #008b8b;">attrResult</span> <span style="color: #228b22;">snb-stat:</span><span style="color: #008b8b;">result-1</span> ].
+</pre>
+</div>
+<p>
+I hope this representation fairly obviously corresponds to the JSON. <b>Please comment</b>.
+</p>
+
+<p>
+Possible extensions:
+</p>
+<ul class="org-ul">
+<li>More dimensions, see <a href="#sec-3-2-8">3.2.8</a>
+</li>
+<li>May need some hierarchical dimension logic to capture the relation between Query Mix and individual Queries
+</li>
+</ul>
+
+<p>
+Converting from JSON to Turtle should not be hard.
+We might even be able to convert automatically by using a JSONLD Context, but I have not tried it.
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-3-3-2" class="outline-4">
+<h4 id="sec-3-3-2"><span class="section-number-4">3.3.2</span> SNB Header</h4>
+<div class="outline-text-4" id="text-3-3-2">
+<p>
+The JSON also has a small "Header":
+</p>
+<div class="org-src-container">
+
+<pre class="src src-js"><span style="color: #8b2252;">"unit"</span>: <span style="color: #8b2252;">"MILLISECONDS"</span>,
+<span style="color: #8b2252;">"start_time"</span>: 1400750662691,
+<span style="color: #8b2252;">"finish_time"</span>: 1400750667691,
+<span style="color: #8b2252;">"total_duration"</span>: 5000,
+<span style="color: #8b2252;">"total_count"</span>: 50,
+</pre>
+</div>
+
+<p>
+I thought about representing this as a small cube, but decided it's overkill.
+So I hacked something using duct tape from various vocabularies (PROV, DCT, RDF).
+Actually there is some thought invested in here:
+</p>
+<ul class="org-ul">
+<li>PROV will be used significantly to describe Runs: who, when, what entities were used (eg benchmark definition, SUT, etc)
+</li>
+<li>The general pattern "propName-value-unit" will be used throughout, eg for hardware features, benchmark parameters, etc
+</li>
+</ul>
+<div class="org-src-container">
+
+<pre class="src src-Turtle"><span style="color: #228b22;">snb-run:</span><span style="color: #008b8b;">sample1</span> <span style="color: #a020f0;">a</span> <span style="color: #228b22;">bm:</span><span style="color: #008b8b;">Run</span>;
+  <span style="color: #228b22;">prov:</span><span style="color: #008b8b;">startedAtTime</span> <span style="color: #228b22;">[rdf:</span><span style="color: #008b8b;">value</span> 1400750662691; <span style="color: #228b22;">qudt:</span><span style="color: #008b8b;">unit</span> <span style="color: #228b22;">unit:</span><span style="color: #008b8b;">MilliSecond]</span>;
+  <span style="color: #228b22;">prov:</span><span style="color: #008b8b;">endedAtTime</span>   <span style="color: #228b22;">[rdf:</span><span style="color: #008b8b;">value</span> 1400750667691; <span style="color: #228b22;">qudt:</span><span style="color: #008b8b;">unit</span> <span style="color: #228b22;">unit:</span><span style="color: #008b8b;">MilliSecond]</span>;
+  <span style="color: #228b22;">dct:</span><span style="color: #008b8b;">extent</span>         <span style="color: #228b22;">[rdf:</span><span style="color: #008b8b;">value</span> 5000;          <span style="color: #228b22;">qudt:</span><span style="color: #008b8b;">unit</span> <span style="color: #228b22;">unit:</span><span style="color: #008b8b;">MilliSecond]</span>;
+  <span style="color: #228b22;">dct:</span><span style="color: #008b8b;">extent</span>         <span style="color: #228b22;">[rdf:</span><span style="color: #008b8b;">value</span> 50;            <span style="color: #228b22;">qudt:</span><span style="color: #008b8b;">unit</span> <span style="color: #228b22;">unit:</span><span style="color: #008b8b;">Number]</span>;
+  <span style="color: #b22222;"># TODO: describe benchmark, driver, system under test, etc</span>
+  <span style="color: #228b22;">bm-stat:</span><span style="color: #008b8b;">dataset</span> <span style="color: #228b22;">snb-run:</span><span style="color: #008b8b;">sample1-cube</span>.
+</pre>
+</div>
+<p>
+Notes:
+</p>
+<ul class="org-ul">
+<li>The most important property is the link <code>bm-stat:dataset snb-run:sample1-cube</code> to the cube.
+</li>
+<li>The Run needs a lot more contextual links (see "PROV" above)
+</li>
+<li>Using dct:extent twice for such varied things like Duration and Count may seem weird,
+but it matches its definition "size or duration of the resource", and Unit distinguishes between the two.
+</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-sec-3-3-3" class="outline-4">
+<h4 id="sec-3-3-3"><span class="section-number-4">3.3.3</span> SNB SPARQL</h4>
+<div class="outline-text-4" id="text-3-3-3">
+<p>
+To make some charts, we need to extract data with SPARQL. Given a Run, say we want to extract:
+</p>
+<ul class="org-ul">
+<li>Each Runtime observation
+</li>
+<li>Each Query, which will be the series. Assume snb:Query has sortable <code>dc:identifier</code> (eg 1 or "Q001")
+</li>
+<li>Mean, min, max to plot "line with error bars"
+</li>
+<li>A "query fulfillment ratio" being "Query runtime count" divided by "Run total count"
+</li>
+</ul>
+<p>
+Since Cube Normalization has brought all values down to each Observation, this is easy.
+Since there are no nulls, we don't need OPTIONALs, so it's also fast.
+We assume that the SPARQL variable <code>$Run</code> is instantiated (i.e. it's a SPARQL parameter)
+</p>
+<div class="org-src-container">
+
+<pre class="src src-SPARQL">select ?query ?mean ?min ?max ?fulfillmentRatio {
+  $Run <span style="color: #228b22;">bm-stat:</span><span style="color: #008b8b;">dataSet</span> ?dataset;
+       <span style="color: #228b22;">dct:</span><span style="color: #008b8b;">extent</span> <span style="color: #228b22;">[rdf:</span><span style="color: #008b8b;">value</span> ?runCount; <span style="color: #228b22;">qudt:</span><span style="color: #008b8b;">unit</span> <span style="color: #228b22;">unit:</span><span style="color: #008b8b;">Number]</span>.
+  ?obs <span style="color: #228b22;">qb:</span><span style="color: #008b8b;">dataSet</span> ?dataset; <span style="color: #228b22;">qb:</span><span style="color: #008b8b;">measureType</span> <span style="color: #228b22;">qb:</span><span style="color: #008b8b;">measRuntime</span>;
+       <span style="color: #228b22;">snb-stat:</span><span style="color: #008b8b;">dimQuery</span> <span style="color: #228b22;">[dc:</span><span style="color: #008b8b;">identifier</span> ?query].
+  {?obs <span style="color: #228b22;">bm-stat:</span><span style="color: #008b8b;">dimStat</span> <span style="color: #228b22;">bm-stat:</span><span style="color: #008b8b;">count</span>; <span style="color: #228b22;">bm-stat:</span><span style="color: #008b8b;">measRuntime</span> ?count.
+      bind(?count / ?runCount as ?fulfillmentRatio)} union
+  {?obs <span style="color: #228b22;">bm-stat:</span><span style="color: #008b8b;">dimStat</span> <span style="color: #228b22;">bm-stat:</span><span style="color: #008b8b;">mean</span>;  <span style="color: #228b22;">bm-stat:</span><span style="color: #008b8b;">measRuntime</span> ?mean} union
+  {?obs <span style="color: #228b22;">bm-stat:</span><span style="color: #008b8b;">dimStat</span> <span style="color: #228b22;">bm-stat:</span><span style="color: #008b8b;">min</span>;   <span style="color: #228b22;">bm-stat:</span><span style="color: #008b8b;">measRuntime</span> ?min} union
+  {?obs <span style="color: #228b22;">bm-stat:</span><span style="color: #008b8b;">dimStat</span> <span style="color: #228b22;">bm-stat:</span><span style="color: #008b8b;">max</span>;   <span style="color: #228b22;">bm-stat:</span><span style="color: #008b8b;">measRuntime</span> ?max}
+} order by ?query
+</pre>
+</div>
+<ul class="org-ul">
+<li>Note: op:numeric-divide() is xsd:decimal if both operands are xsd:integer, so we don't need to coerce to decimal
+</li>
+<li>TODO: check how the UNION behaves
+</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-sec-3-3-4" class="outline-4">
+<h4 id="sec-3-3-4"><span class="section-number-4">3.3.4</span> SNB Stat Ontology</h4>
+<div class="outline-text-4" id="text-3-3-4">
+<p>
+<a href="./snb-stat.ttl">./snb-stat.ttl</a> is based on BM Stat <i>BM Stat Ontology</i>, and includes some Stat things that are specific to SNB
+(we could decide to move it into BM Stat to keep the benchmarks-specific ontology minimal).
+</p>
+
+<p>
+First a more specific Dimension that inherits all fields from <code>bm-stat:dimQuery</code> but fixes the range to <code>snb:Query</code>. 
+This allows checking that the right query is used in SNB cubes, but that's little gain. 
+We can do without this property.
+</p>
+<div class="org-src-container">
+
+<pre class="src src-Turtle"><span style="color: #228b22;">snb-stat:</span><span style="color: #008b8b;">dimQuery</span> <span style="color: #a020f0;">a</span> <span style="color: #228b22;">rdf:</span><span style="color: #008b8b;">Property,</span> <span style="color: #228b22;">qb:</span><span style="color: #008b8b;">DimensionProperty</span>;
+  <span style="color: #228b22;">rdfs:</span><span style="color: #008b8b;">label</span> <span style="color: #8b2252;">"query"</span>@en;
+  <span style="color: #228b22;">rdfs:</span><span style="color: #008b8b;">comment</span> <span style="color: #8b2252;">"Query being measured"</span>@en;
+  <span style="color: #228b22;">rdfs:</span><span style="color: #008b8b;">subPropertyOf</span> <span style="color: #228b22;">bm-stat:</span><span style="color: #008b8b;">dimQuery</span>;
+  <span style="color: #228b22;">rdfs:</span><span style="color: #008b8b;">range</span> <span style="color: #228b22;">snb:</span><span style="color: #008b8b;">Query</span>;
+  <span style="color: #228b22;">qb:</span><span style="color: #008b8b;">concept</span> <span style="color: #228b22;">bm-stat:</span><span style="color: #008b8b;">conceptQuery</span>.
+</pre>
+</div>
+
+<p>
+Then a Measure for the SNB-specific concept of "start time delay":
+</p>
+<div class="org-src-container">
+
+<pre class="src src-Turtle"><span style="color: #228b22;">snb-stat:</span><span style="color: #008b8b;">measStartDelay</span> <span style="color: #a020f0;">a</span> <span style="color: #228b22;">rdf:</span><span style="color: #008b8b;">Property,</span> <span style="color: #228b22;">qb:</span><span style="color: #008b8b;">MeasureProperty</span>;
+  <span style="color: #228b22;">rdfs:</span><span style="color: #008b8b;">label</span> <span style="color: #8b2252;">"start delay"</span>@en;
+  <span style="color: #228b22;">rdfs:</span><span style="color: #008b8b;">comment</span> <span style="color: #8b2252;">"Delay from scheduled time to actual execution time"</span>@en;
+  <span style="color: #228b22;">rdfs:</span><span style="color: #008b8b;">range</span> <span style="color: #228b22;">xsd:</span><span style="color: #008b8b;">decimal</span>.
+</pre>
+</div>
+
+<p>
+Then we define a concept of "Result (code)", and an Attribute and Dimension using that concept. 
+You can see how the Attribute and Dimension are tied together through the concept.
+The Attribute is categorial (a qb:CodedProperty) while the Measure is numeric (integer).
+</p>
+<div class="org-src-container">
+
+<pre class="src src-Turtle"><span style="color: #228b22;">snb-stat:</span><span style="color: #008b8b;">attrResult</span> <span style="color: #a020f0;">a</span> <span style="color: #228b22;">rdf:</span><span style="color: #008b8b;">Property,</span> <span style="color: #228b22;">qb:</span><span style="color: #008b8b;">AttributeProperty,</span> <span style="color: #228b22;">qb:</span><span style="color: #008b8b;">CodedProperty</span>;
+  <span style="color: #228b22;">rdfs:</span><span style="color: #008b8b;">label</span> <span style="color: #8b2252;">"result code"</span>@en;
+  <span style="color: #228b22;">rdfs:</span><span style="color: #008b8b;">comment</span> <span style="color: #8b2252;">"Result being counted"</span>@en;
+  <span style="color: #228b22;">rdfs:</span><span style="color: #008b8b;">range</span> <span style="color: #228b22;">snb-stat:</span><span style="color: #008b8b;">Result</span>;
+  <span style="color: #228b22;">qb:</span><span style="color: #008b8b;">concept</span> <span style="color: #228b22;">bm-stat:</span><span style="color: #008b8b;">conceptResult</span>;
+  <span style="color: #228b22;">qb:</span><span style="color: #008b8b;">codeList</span> <span style="color: #228b22;">snb-stat:</span><span style="color: #008b8b;">result</span><span style="color: #228b22;">.</span>
+
+<span style="color: #228b22;">snb-stat:</span><span style="color: #008b8b;">measResult</span> <span style="color: #a020f0;">a</span> <span style="color: #228b22;">rdf:</span><span style="color: #008b8b;">Property,</span> <span style="color: #228b22;">qb:</span><span style="color: #008b8b;">MeasureProperty</span>;
+  <span style="color: #228b22;">rdfs:</span><span style="color: #008b8b;">label</span> <span style="color: #8b2252;">"result count"</span>@en;
+  <span style="color: #228b22;">rdfs:</span><span style="color: #008b8b;">comment</span> <span style="color: #8b2252;">"Count of results"</span>@en;
+  <span style="color: #228b22;">qb:</span><span style="color: #008b8b;">concept</span> <span style="color: #228b22;">bm-stat:</span><span style="color: #008b8b;">conceptResult</span>;
+  <span style="color: #228b22;">rdfs:</span><span style="color: #008b8b;">range</span> <span style="color: #228b22;">xsd:</span><span style="color: #008b8b;">integer</span>.
+</pre>
+</div>
+<p>
+We also define a codeList and code values (concepts) like <code>snb-stat:result-1</code> (not interesting).
+</p>
+
+<p>
+Now we define a <a href="http://www.w3.org/TR/vocab-data-cube/#dsd-dsd">DataStructureDefinition</a> for the cube. 
+We use <a href="http://www.w3.org/TR/vocab-data-cube/#h4_dsd-mm-dim">Measure dimension</a> <code>qb:measureType</code> because we got heterogenous observations: 
+the 3 Measures are <b>not</b> uniformly populated throughout the cube.
+</p>
+<div class="org-src-container">
+
+<pre class="src src-Turtle"><span style="color: #228b22;">snb-stat:</span><span style="color: #008b8b;">dsdCube</span> <span style="color: #a020f0;">a</span> <span style="color: #228b22;">qb:</span><span style="color: #008b8b;">DataStructureDefinition</span>;
+  <span style="color: #228b22;">qb:</span><span style="color: #008b8b;">component</span> 
+    [ <span style="color: #228b22;">qb:</span><span style="color: #008b8b;">dimension</span> <span style="color: #228b22;">snb-stat:</span><span style="color: #008b8b;">dimQuery</span>; <span style="color: #228b22;">qb:</span><span style="color: #008b8b;">componentAttachment</span> <span style="color: #228b22;">qb:</span><span style="color: #008b8b;">Slice</span> ],
+    [ <span style="color: #228b22;">qb:</span><span style="color: #008b8b;">dimension</span> <span style="color: #228b22;">qb:</span><span style="color: #008b8b;">measureType</span>; <span style="color: #228b22;">qb:</span><span style="color: #008b8b;">componentAttachment</span> <span style="color: #228b22;">qb:</span><span style="color: #008b8b;">Slice</span> ],
+    [ <span style="color: #228b22;">qb:</span><span style="color: #008b8b;">dimension</span> <span style="color: #228b22;">bm-stat:</span><span style="color: #008b8b;">dimStat</span> ], <span style="color: #b22222;"># mean, min, max, etc</span>
+    [ <span style="color: #228b22;">qb:</span><span style="color: #008b8b;">attribute</span> <span style="color: #228b22;">bm-stat:</span><span style="color: #008b8b;">attrUnit</span> ], <span style="color: #b22222;"># applicable for measRuntime and measStartDelay</span>
+    [ <span style="color: #228b22;">qb:</span><span style="color: #008b8b;">attribute</span> <span style="color: #228b22;">bm-stat:</span><span style="color: #008b8b;">attrResult</span> ], <span style="color: #b22222;"># applicable for measResult</span>
+    [ <span style="color: #228b22;">qb:</span><span style="color: #008b8b;">measure</span>   <span style="color: #228b22;">bm-stat:</span><span style="color: #008b8b;">measRuntime</span> ],
+    [ <span style="color: #228b22;">qb:</span><span style="color: #008b8b;">measure</span>   <span style="color: #228b22;">snb-stat:</span><span style="color: #008b8b;">measStartDelay</span> ],
+    [ <span style="color: #228b22;">qb:</span><span style="color: #008b8b;">measure</span>   <span style="color: #228b22;">snb-stat:</span><span style="color: #008b8b;">measResult</span> ];
+  <span style="color: #228b22;">qb:</span><span style="color: #008b8b;">sliceKey</span> <span style="color: #228b22;">snb-stat:</span><span style="color: #008b8b;">sliceByQueryAndMeasure</span>.
+</pre>
+</div>
+
+<p>
+Finally we define a slice structure. In each slice instance, <code>snb-stat:dimQuery and ~qb:measureType</code> must be fixed.
+</p>
+<div class="org-src-container">
+
+<pre class="src src-Turtle"><span style="color: #228b22;">snb-stat:</span><span style="color: #008b8b;">sliceByQueryAndMeasure</span> <span style="color: #a020f0;">a</span> <span style="color: #228b22;">qb:</span><span style="color: #008b8b;">SliceKey</span>;
+  <span style="color: #228b22;">rdfs:</span><span style="color: #008b8b;">label</span> <span style="color: #8b2252;">"slice by query and measure"</span>@en;
+  <span style="color: #228b22;">rdfs:</span><span style="color: #008b8b;">comment</span> <span style="color: #8b2252;">"Fix dimensions dimQuery and measureType"</span>@en;
+  <span style="color: #228b22;">qb:</span><span style="color: #008b8b;">componentProperty</span> <span style="color: #228b22;">snb-stat:</span><span style="color: #008b8b;">dimQuery,</span> <span style="color: #228b22;">qb:</span><span style="color: #008b8b;">measureType</span>.
+</pre>
+</div>
+<p>
+Please look at <a href="#sec-3-3-1">3.3.1</a> and check how this structure is used by the cube and slice instances.
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-3-3-5" class="outline-4">
+<h4 id="sec-3-3-5"><span class="section-number-4">3.3.5</span> <span class="todo TODO">TODO</span> SNB FDR</h4>
+<div class="outline-text-4" id="text-3-3-5">
+<p>
+Map c:/my/Onto/proj/LDBC/benchmarks/snb_full_disclosure/full_disclosure.txt
+</p>
+</div>
+</div>
+</div>
+<div id="outline-container-sec-3-4" class="outline-3">
+<h3 id="sec-3-4"><span class="section-number-3">3.4</span> SPB Results</h3>
+<div class="outline-text-3" id="text-3-4">
+<p>
+semantic_publishing_benchmark_results.log is a simple text format like this:
+</p>
+<ul class="org-ul">
+<li>It's cumulative, so you only need to look at the last block
+</li>
+<li>960260 is the timestamp in MilliSeconds (with warmup), 900 is the timestamp in seconds (without warmup)
+</li>
+<li>Editorial are write threads (just 1); Aggregation are read threads (6 of them)
+</li>
+<li>Write threads execute 3 kinds of queries (insert, update, delete), read threads execute Q1..Q9
+</li>
+<li>Counts per update operation, per query; total updates and total queries
+</li>
+<li>"Completed query mixes" is just about equal to the minimum of counts per query (a mix is counted Completed if each query was executed once)
+</li>
+<li>Number of errors: total for update operations; per query for read operations
+</li>
+<li>Average, min, max MilliSeconds per operation (90, 90, 99 percentiles will also be added)
+</li>
+</ul>
+<p>
+<a href="./spb-sample1.txt">./spb-sample1.txt</a>:
+</p>
+<pre class="example">
+960260 : 
+
+Seconds : 900 (completed query mixes : 296)
+	Editorial:
+		1 agents
+
+		7082  inserts (avg : 85      ms, min : 50      ms, max : 1906    ms)
+		903   updates (avg : 203     ms, min : 128     ms, max : 1894    ms)
+		879   deletes (avg : 110     ms, min : 64      ms, max : 1397    ms)
+
+		8864 operations (7082 CW Inserts (0 errors), 903 CW Updates (0 errors), 879 CW Deletions (0 errors))
+		9.8489 average operations per second
+
+	Aggregation:
+		6 agents
+
+		299   Q1   queries (avg : 2120    ms, min : 10      ms, max : 31622   ms, 0 errors)
+		297   Q2   queries (avg : 13      ms, min : 10      ms, max : 108     ms, 0 errors)
+		297   Q3   queries (avg : 3200    ms, min : 383     ms, max : 85870   ms, 0 errors)
+		298   Q4   queries (avg : 694     ms, min : 100     ms, max : 7135    ms, 0 errors)
+		300   Q5   queries (avg : 368     ms, min : 16      ms, max : 5622    ms, 0 errors)
+		298   Q6   queries (avg : 303     ms, min : 37      ms, max : 10246   ms, 0 errors)
+		297   Q7   queries (avg : 1439    ms, min : 58      ms, max : 4995    ms, 0 errors)
+		297   Q8   queries (avg : 531     ms, min : 80      ms, max : 2293    ms, 0 errors)
+		298   Q9   queries (avg : 9184    ms, min : 509     ms, max : 37868   ms, 0 errors)
+
+		2681 total retrieval queries (0 timed-out)
+		3.0225 average queries per second
+</pre>
+</div>
+<div id="outline-container-sec-3-4-1" class="outline-4">
+<h4 id="sec-3-4-1"><span class="section-number-4">3.4.1</span> <span class="todo TODO">TODO</span> SPB Turtle</h4>
+</div>
+</div>
+<div id="outline-container-sec-3-5" class="outline-3">
+<h3 id="sec-3-5"><span class="section-number-3">3.5</span> BM Stat Ontology</h3>
+<div class="outline-text-3" id="text-3-5">
+<p>
+The BM Stat Ontology <a href="./bm-stat.ttl">./bm-stat.ttl</a> defines common stat concepts that can be used between different benchmarks:
+</p>
+<ul class="org-ul">
+<li>Common concepts, such as Run, Runtime, Query, Result (code)
+</li>
+<li>Summary Statistics codeList <code>bm-stat:stat</code>, class <code>bm-stat:Stat</code> and code values, as shown in <a href="#sec-3-2-4">3.2.4</a>
+</li>
+<li>Commonly used dimensions, measures and attributes: <code>bm-stat:dimQuery</code>, <code>bm-stat:dimStat</code>, <code>bm-stat:measRuntime</code>, <code>bm-stat:attrUnit</code>.
+<ul class="org-ul">
+<li>These have appropriate ranges: (to be defined in subproperties), <code>bm-stat:Stat</code>, <code>xsd:decimal</code>, <code>qudt:Unit</code> respectively
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="date">Date: 2015-02-02</p>
+<p class="author">Author: Vladimir Alexiev, Ontotext Corp</p>
+<p class="email">Email: <a href="mailto:vladimir.alexiev@ontotext.com">vladimir.alexiev@ontotext.com</a></p>
+<p class="date">Created: 2015-02-02 Mon 15:48</p>
+<p class="creator">Proudly made with: Emacs 24.3.91.1 (Org mode 8.2.7c)</p>
+<p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
+</div>
+</body>
+</html>

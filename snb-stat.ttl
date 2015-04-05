@@ -1,0 +1,72 @@
+# -- SNB Dimensions, measures, codelists  ----------------------------
+
+snb-stat:dimQuery a rdf:Property, qb:DimensionProperty;
+  rdfs:label "query"@en;
+  rdfs:comment "Query being measured"@en;
+  rdfs:subPropertyOf bm-stat:dimQuery;
+  rdfs:range snb:Query;
+  qb:concept bm-stat:conceptQuery.
+
+snb-stat:measStartDelay a rdf:Property, qb:MeasureProperty;
+  rdfs:label "start delay"@en;
+  rdfs:comment "Delay from scheduled time to actual execution time"@en;
+  rdfs:range xsd:decimal.
+
+snb-stat:attrResult a rdf:Property, qb:AttributeProperty, qb:CodedProperty;
+  rdfs:label "result code"@en;
+  rdfs:comment "Result being counted"@en;
+  rdfs:range snb-stat:Result;
+  qb:concept bm-stat:conceptResult;
+  qb:codeList snb-stat:result.
+
+snb-stat:measResult a rdf:Property, qb:MeasureProperty;
+  rdfs:label "result count"@en;
+  rdfs:comment "Count of results"@en;
+  qb:concept bm-stat:conceptResult;
+  rdfs:range xsd:integer.
+
+snb-stat:result a skos:ConceptScheme;
+  rdfs:label "Results concept scheme"@en;
+  rdfs:seeAlso snb-stat:Result.
+
+snb-stat:Result a rdfs:Class, owl:Class;
+  rdfs:label "Result"@en;
+  rdfs:comment "Codelist (enumeration) of Results: 0, 1"@en;
+  rdfs:subClassOf skos:Concept;
+  rdfs:seeAlso snb-stat:result.
+
+snb-stat:result-0 a skos:Concept, snb-stat:Result ;
+  rdfs:label "Result 0"@en;
+  rdfs:comment "Result code 0"@en;
+  skos:inScheme snb-stat:result.
+
+snb-stat:result-1 a skos:Concept, snb-stat:Result ;
+  rdfs:label "Result 1"@en;
+  rdfs:comment "Result code 1"@en;
+  skos:inScheme snb-stat:result.
+
+snb-stat:result-total a skos:Concept, snb-stat:Result ;
+  rdfs:label "Result total"@en;
+  rdfs:comment "Result total count"@en;
+  skos:inScheme snb-stat:result.
+
+# -- SNB data structure definition ----------------------------
+# http://www.w3.org/TR/vocab-data-cube/#dsd-dsd
+
+snb-stat:dsdCube a qb:DataStructureDefinition;
+  qb:component 
+    [ qb:dimension snb-stat:dimQuery; qb:componentAttachment qb:Slice ],
+    [ qb:dimension qb:measureType; qb:componentAttachment qb:Slice ],
+       # http://www.w3.org/TR/vocab-data-cube/#h4_dsd-mm-dim: we use Measure dimension because we got heterogenous observations
+    [ qb:dimension bm-stat:dimStat ], # mean, min, max, etc
+    [ qb:attribute bm-stat:attrUnit ], # applicable for measRuntime and measStartDelay
+    [ qb:attribute bm-stat:attrResult ], # applicable for measResult
+    [ qb:measure   bm-stat:measRuntime ],
+    [ qb:measure   snb-stat:measStartDelay ],
+    [ qb:measure   snb-stat:measResult ];
+  qb:sliceKey snb-stat:sliceByQueryAndMeasure.
+
+snb-stat:sliceByQueryAndMeasure a qb:SliceKey;
+  rdfs:label "slice by query and measure"@en;
+  rdfs:comment "Fix dimensions dimQuery and measureType"@en;
+  qb:componentProperty snb-stat:dimQuery, qb:measureType.

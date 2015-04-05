@@ -1,0 +1,52 @@
+# -- SNB run statistical data ----------------------
+# based on snb-sample1.json, which is taken from
+# snb_spec_v0.2.0.pdf sec 3.3 Gathering the results
+
+snb-run:sample1 a bm:Run;
+  prov:startedAtTime [rdf:value 1400750662691; qudt:unit unit:MilliSecond];
+  prov:endedAtTime   [rdf:value 1400750667691; qudt:unit unit:MilliSecond];
+  dct:extent         [rdf:value 5000;          qudt:unit unit:MilliSecond];
+  dct:extent         [rdf:value 50;            qudt:unit unit:Number];
+  # TODO: describe benchmark, driver, system under test, etc
+  bm-stat:dataSet snb-run:sample1-cube.
+
+snb-run:sample1-cube a qb:DataSet;
+  qb:structure snb-stat:dsdCube;
+  qb:slice snb-run:sample1-sliceRuntime, snb-run:sample1-sliceStartDelay, snb-run:sample1-sliceResult.
+
+snb-run:sample1-sliceRuntime a qb:Slice;
+  qb:sliceStructure snb-stat:sliceByQueryAndMeasure;
+  snb-stat:dimQuery snb:Query1;
+  qb:measureType qb:measRuntime;
+  qb:observation 
+    [ bm-stat:dimStat bm-stat:count;        bm-stat:measRuntime  50; bm-stat:attrUnit unit:Number      ],
+    [ bm-stat:dimStat bm-stat:mean;         bm-stat:measRuntime 100; bm-stat:attrUnit unit:MilliSecond ],
+    [ bm-stat:dimStat bm-stat:min;          bm-stat:measRuntime   2; bm-stat:attrUnit unit:MilliSecond ],
+    [ bm-stat:dimStat bm-stat:max;          bm-stat:measRuntime 450; bm-stat:attrUnit unit:MilliSecond ],
+    [ bm-stat:dimStat bm-stat:median;       bm-stat:measRuntime  98; bm-stat:attrUnit unit:MilliSecond ],
+    [ bm-stat:dimStat bm-stat:percentile90; bm-stat:measRuntime 129; bm-stat:attrUnit unit:MilliSecond ],
+    [ bm-stat:dimStat bm-stat:percentile95; bm-stat:measRuntime 432; bm-stat:attrUnit unit:MilliSecond ],
+    [ bm-stat:dimStat bm-stat:percentile99; bm-stat:measRuntime 444; bm-stat:attrUnit unit:MilliSecond ].
+
+snb-run:sample1-sliceStartDelay a qb:Slice;
+  qb:sliceStructure snb-stat:sliceByQueryAndMeasure;
+  snb-stat:dimQuery snb:Query1;
+  qb:measureType snb-stat:measStartDelay;
+  qb:observation 
+    [ bm-stat:dimStat bm-stat:count;        bm-stat:measStartDelay  7;    bm-stat:attrUnit unit:Number      ],
+    [ bm-stat:dimStat bm-stat:mean;         bm-stat:measStartDelay  3.57; bm-stat:attrUnit unit:MilliSecond ],
+    [ bm-stat:dimStat bm-stat:min;          bm-stat:measStartDelay  0;    bm-stat:attrUnit unit:MilliSecond ],
+    [ bm-stat:dimStat bm-stat:max;          bm-stat:measStartDelay 25;    bm-stat:attrUnit unit:MilliSecond ],
+    [ bm-stat:dimStat bm-stat:median;       bm-stat:measStartDelay  0;    bm-stat:attrUnit unit:MilliSecond ],
+    [ bm-stat:dimStat bm-stat:percentile90; bm-stat:measStartDelay  0;    bm-stat:attrUnit unit:MilliSecond ],
+    [ bm-stat:dimStat bm-stat:percentile95; bm-stat:measStartDelay 25;    bm-stat:attrUnit unit:MilliSecond ],
+    [ bm-stat:dimStat bm-stat:percentile99; bm-stat:measStartDelay 25;    bm-stat:attrUnit unit:MilliSecond ].
+
+snb-run:sample1-sliceResult a qb:Slice;
+  qb:sliceStructure snb-stat:sliceByQueryAndMeasure;
+  snb-stat:dimQuery snb:Query1;
+  qb:measureType snb-stat:measResult;
+  qb:observation 
+    [ bm-stat:dimStat bm-stat:count; bm-stat:measResult 50;  bm-stat:attrResult snb-stat:result-total ],
+    [ bm-stat:dimStat bm-stat:count; bm-stat:measResult 42;  bm-stat:attrResult snb-stat:result-0 ],
+    [ bm-stat:dimStat bm-stat:count; bm-stat:measResult  8;  bm-stat:attrResult snb-stat:result-1 ].

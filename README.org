@@ -1,0 +1,816 @@
+#+TITLE: LDBC Benchmarking Ontology
+#+DATE: 2015-02-02
+#+AUTHOR: Vladimir Alexiev, Ontotext Corp
+#+EMAIL: vladimir.alexiev@ontotext.com
+#+STARTUP: content
+#+OPTIONS: ':nil *:t -:t ::t <:t H:4 \n:nil ^:{} arch:headline author:t c:nil
+#+OPTIONS: creator:comment d:(not "LOGBOOK") date:t e:t email:t f:t inline:t num:t
+#+OPTIONS: p:nil pri:nil stat:t tags:t tasks:t tex:nil timestamp:t toc:4 todo:t |:t
+#+CREATOR: Proudly made with: Emacs 24.3.91.1 (Org mode 8.2.7c)
+#+OPTIONS: html-link-use-abs-url:nil html-postamble:auto html-preamble:t html-scripts:t
+#+LANGUAGE: en
+
+* Intro
+The Benchmarking Ontology (BM) will cover the following scope. For each scope area we list some relevant ontologies that we have taken inspiration from, or reused.
+- system under test (SUT)
+  - hardware & price: GoodRelations, [[http://answers.semanticweb.com/questions/27854/ontology-for-hardware-features][LinkedOpenCommerce]]
+  - platform: DOAP, with dbpedia URLs for specific things (eg db:Linux, db:Java_Virtual_Machine)
+  - database: DOAP (project and relase), FOAF (vendor, sponsor)
+- benchmark definition: RDFUnit, test manifests for DAWG (SPARQL), R2RML, RDF
+  - benchmark definition versions
+- benchmark execution setup
+  - driver, parameters, SUT
+- benchmark generator, parameters
+  - benchmark dataset (if it makes sense to save rather than rerun generator): VOID
+- results provenance: PROV
+- detailed results log: RLOG
+- results/assertions for each query: EARL, RDFUnit
+- result statistics: CUBE, SDMX
+
+This is a rather ambitious scope.
+Following partner priorities, we start by describing Result Statistics, which is a little backwards but anyway.
+
+** Revisions
+- <2015-01-21>: initial version. Overview of prefixes, potential benchmarks. Stat ontologies, Cube, SPB Sample1, BM Stat initial
+- <2015-02-02>: added discussion on Benchmark Result Dimensions [[Benchmark Result Dimensions]]
+- NEXT: SPB Stat sample
+** Prefixes
+All the prefixes we use are in [[./prefixes.ttl]] and should be:
+- Added to a repo (eg Ontotext GraphDb can do that from this file), or
+- Prepended to Turtle files before loading/validating
+We use the prefix.cc service as much as possible. A lot of the used prefixes can be fetched from:
+- http://prefix.cc/dbr,dbo,dct,owl,prov,qb,qudt,rdf,rdfs,schema,skos,unit,xsd,sdmx.ttl
+We include here a very brief description
+| *prefix* | *ontology*                              | *used for*                                          |
+| DCT      | Dublin Core Terms                       | various props, eg dct:extent of a Run               |
+| DBR      | DBpedia resource                        | stable URLs, eg dbr:Linux, dbr:Java_Virtual_Machine |
+| DBO      | DBpedia Ontology                        | (maybe) a few properties                            |
+| DOAP     | Description of a Project                | database, release                                   |
+| GR       | Good Relations                          | price (or maybe will prefer schema.org)             |
+| OWL      | Web Ontology Language                   | system ontology                                     |
+| PROV     | Provenance Ontology                     | provenance of results, start/end of Run             |
+| QUDT     | Quantities, Units, Dimensions and Types | Units of Measure in stats                           |
+| RDF      | Resource Description Framework          | system ontology                                     |
+| RDFS     | RDF Schema                              | system ontology                                     |
+| Schema   | schema.org ontology                     | various props                                       |
+| SKOS     | Simple Knowledge Organisation System    | concepts and codelists (concept schemes)            |
+| SPIN     | SPARQL Inferencing Notation             | (maybe) constraints on cube representation          |
+| Unit     | Units of Measure (part of QUDT)         | Units of Measure in stats                           |
+| XSD      | XML Schema Datatypes                    | literal datatypes                                   |
+| SDMX*    | Statistical Data and Metadata eXchange  | statistical concepts                                |
+** Testing Ontologies
+The idea to represent tests and test runs in RDF is very old.
+We've studied a number of testing ontologies that have influenced greatly our design.
+Still, we couldn't reuse a lot, because our domain is performance testing, not conformance testing.
+
+Below are some brief descriptions, followed by more details in subsections. Legend:
+- x = well developed or widely used
+- ? = maybe will use
+- + = will use
+| *s* | *prefix*      | *ontology*                            | *could be used for*                              |
+| x   | EARL          | Evaluation and Report Language        | reporting conformance (pass/fail) claims         |
+|     | NIF-STC       | NIF test case                         | weak ontology for testing NLP Interchange Format |
+| x   | RDB2RDF-TC    | RDB2RDF test case                     | testing RDB2RDF mapping language implementations |
+|     | RDB2RDF-test  | RDB2RDF test                          | testing RDB2RDF. Missing                         |
+|     | RDF-test      | RDF 1.1 test                          | testing RDF parsers                              |
+|     | RDF-test1     | RDF test (old)                        | testing RDF parsers                              |
+| ?   | result-set    | SPARQL result set                     | could be used in conformance/validation testing  |
+| +   | RLOG          | RDF Logging Ontology                  | basic log entry (timestamp, level, message)      |
+| x   | RUT*          | RDFUnit: test generation and excution | test definitions and test results                |
+|     | test-dawg     | SPARQL query testing (old)            |                                                  |
+| ?   | test-descr    | Test Metadata, see [[http://www.w3.org/TR/test-metadata/][working note]]       | Purpose, grouping, etc                           |
+| +   | test-manifest | Test Manifest                         | representing test cases                          |
+| x   | test-query    | SPARQL 1.1 query testing              |                                                  |
+|     | test-update   | SPARQL 1.1 update testing             |                                                  |
+** Test Manifest
+A test Manifest is a ttl description of a test suite (set of test cases), pointing to all relevant files (inputs, queries, "action" or expected output).
+Manifests are widely used by W3C working groups.
+Because test cases are made up mostly of files, it is notorious how well the directory and RDF structures are inter-meshed, and we should learn from this.
+Test cases and queries have stable identifiers, which are used as pivots in test reporting (see EARL).
+
+Examples:
+- RDF 1.1 ::
+  - A number of tests for the various RDF serialization formats http://www.w3.org/TR/rdf11-testcases/. Eg for Turtle 1.1:
+  - tests http://www.w3.org/2013/TurtleTests/
+  - manifest http://www.w3.org/2013/TurtleTests/manifest.ttl
+  - methodology: http://www.w3.org/2013/TurtleTests/README, http://www.w3.org/2011/rdf-wg/wiki/Turtle_Test_Suite
+- SPARQL/DAWG/SparqlScore ::
+  - old tests: http://www.w3.org/2001/sw/DataAccess/, http://www.w3.org/2001/sw/DataAccess/data-r2
+  - new test: http://www.w3.org/2009/sparql/docs/tests
+- R2RML ::
+  - Methodology: http://www.w3.org/2001/sw/rdb2rdf/wiki/Submitting_Test_Results
+  - Test cases: http://www.w3.org/TR/rdb2rdf-test-cases/
+  - Test files & manifests: https://dvcs.w3.org/hg/rdb2rdf-tests/file/
+  - Ontology http://vocab.deri.ie/rdb2rdftc.html, http://vocab.deri.ie/rdb2rdftc.ttl.
+    Carries input (database statements), R2RML mapping, expected output.
+    - This one is missing: http://purl.org/NET/rdb2rdf-test
+    - This one has various problems: https://github.com/boricles/rdb2rdf-th/blob/master/model/rdb2rdf-test.ttl,
+      eg some ObjectProperties are duplicated as AnnotationProperties
+  - Numerous manifests. Eg for two Test Cases:
+    - https://dvcs.w3.org/hg/rdb2rdf-tests/raw-file/d53b6a1cc393/D025-3tables3primarykeys3foreignkeys/manifest.ttl
+    - https://dvcs.w3.org/hg/rdb2rdf-tests/raw-file/d53b6a1cc393/D011-M2MRelations/manifest.ttl
+** EARL
+EARL (Evaluation and Report Language) was first developed by the WAI Evaluation and Repair Tools Working Group, but is now used widely by W3C groups.
+- Intro: http://www.w3.org/WAI/intro/earl.php
+- Requirements: http://www.w3.org/TR/EARL10-Requirements/
+- Guide: http://www.w3.org/TR/EARL10-Guide/
+- Definition: http://www.w3.org/TR/EARL10-Schema/
+Most W3C specifications have an obligation to produce an Implementation Report that list at least 2 conformant implementations for every spec feature.
+This requires conformance testing, and EARL  is designed to express conformance claims.
+By asking implementors to provide results in EARL, the implementation reports of numerous systems can be assembled automatically to a webpage.
+We want to use the same idea for the benchmark reporting section of the LDBC website.
+
+Examples:
+- RDF 1.1 ::
+  - Includes a number of implementation reports for varous RDF serialization formats. Eg for Turtle 1.1:
+  - Implementation report: https://dvcs.w3.org/hg/rdf/raw-file/default/rdf-turtle/reports/earl.ttl
+  - Report in EARL: https://dvcs.w3.org/hg/rdf/raw-file/default/rdf-turtle/reports/index.html
+  - Individual EARL files: https://dvcs.w3.org/hg/rdf/raw-file/default/rdf-turtle/reports/index.html#individual-test-results
+- RDB2RDF ::
+  - Implementation report: http://www.w3.org/TR/rdb2rdf-implementations/
+  - EARL files are linked to the column headers, eg:
+    - Virtuoso: http://mappingpedia.linkeddata.es/rdb2rdf/implementations/virtuoso/Rdb2RdfW3c1206_virtuoso_earl.ttl
+    - RDB2RDF over Postgres: http://mappingpedia.linkeddata.es/rdb2rdf/implementations/rdf-rdb2rdf/with-postgres.ttl
+  - I have looked at the Perl implementation in more detail:
+    - Report with more detailed explanations of each result: https://github.com/tobyink/p5-rdf-rdb2rdf/blob/master/meta/earl/summary.html
+    - EARL files: https://github.com/tobyink/p5-rdf-rdb2rdf/tree/master/meta/earl
+- SPARQL ::
+  - Implementation report http://www.w3.org/2009/sparql/implementations/
+  - EARL files are linked at the end, eg
+    - Jena ARQ: http://people.apache.org/~andy/SPARQL-EARL-Current/ARQ-earl-2012-11-27.ttl
+    - ARQ with entailment (inference): http://arq-inference.googlecode.com/svn/ARQ_Inference/ARQ_Entailment_ImplRep.ttl
+  - EARL files (old): http://www.w3.org/2001/sw/DataAccess/tests/earl
+
+Report makers (HTML generators):
+- Report for RDF: https://github.com/gkellogg/earl-report
+- Report for SPARQL: https://github.com/kasei/SPARQL-1.1-Implementation-Report
+- Report for RDB2RDF Perl: https://github.com/tobyink/p5-rdf-rdb2rdf/blob/master/devel.utils/earl-summaries.pl
+
+Test drivers (harness & EARL generators):
+- RDB2RDF
+  - Source: https://github.com/boricles/rdb2rdf-th
+  - Binary: http://boris.villazon.terrazas.name/projects/rdb2rdf/tc/th/rdb2rdf-th_bin_0.0.8.zip
+  - Description: http://www.w3.org/2001/sw/rdb2rdf/wiki/Submitting_Test_Results#Phase_3._Download_the_Test_Harness_software
+- RDB2RDF Perl: https://github.com/tobyink/p5-rdf-rdb2rdf/tree/master/xt, in particular https://github.com/tobyink/p5-rdf-rdb2rdf/tree/master/xt/lib/Test/RDB2RDF/Suite.pm
+- EARL manipulation: https://metacpan.org/source/GWILLIAMS/RDF-EARL-0.001/README
+
+* Potential Benchmarks
+We follow an example-driven appproach: first make Turtle files for specific examples, then make an ontology to fit them.
+(Since we borrow liberally from other ontologies, in many cases we make what's called Application Profiles,
+i.e. specifications about the shapes of our RDF.)
+
+We may cover the following examples, listed in decreasing priority. Our intent is for BM to be able to represent all of these benchmarks
+| *Abbrev* | *Benchmark*                      | *MoSCoW* |
+| SPB      | Semantic Publishing Benchmark    | must     |
+| SNB      | Social Network Benchmark         | must     |
+| BSBM     | Berlin SPARQL Benchmark          | should   |
+| SP2B     | SPARQL 2 Benchmark               | could    |
+| LUBM     | LUBM Lehigh University Benchmark | could    |
+| TPC-H    | Transaction Processing Council H | won't    |
+** TODO SPB
+Update description & links
+- SPB Spec https://github.com/ldbc/ldbc_spb_bm/blob/master/doc/LDBC_SPB_v0.1.pdf
+- SPB FDR https://github.com/ldbc/ldbc_spb_bm/blob/master/doc/LDBC_SPB_FDR_v1.0.docx
+- latest description
+- a dataset, with its description
+- sample test run results
+** TODO SNB
+Update description & links
+- latest description. SPB presents an interesting challenge, in that the queries have several representations (English, SPARQL, CYPHER)
+- a dataset, with its description
+- sample test run results. Would be best if you have from two different systems
+- SNB spec https://github.com/ldbc/ldbc_snb_docs/blob/master/LDBC_SNB_v0.1.5.pdf
+- SNB Interactive Workload design doc (http://ldbc.eu/sites/default/files/LDBC_D3.3.34.pdf)
+- SNB Full Disclosure: full_disclosure.txt and supporting_files/
+- SNB interactive workload mix (first section of http://ldbc.eu/sites/default/files/LDBC_D2.2.3_final.pdf)
+** BSBM 3.1
+- spec 3.1: http://wifo5-03.informatik.uni-mannheim.de/bizer/berlinsparqlbenchmark/spec/index.html
+- data generator: http://wifo5-03.informatik.uni-mannheim.de/bizer/berlinsparqlbenchmark/spec/BenchmarkRules/index.html#datagenerator
+- run Apr 2013: http://wifo5-03.informatik.uni-mannheim.de/bizer/berlinsparqlbenchmark/results/V7/index.html
+- driver
+  - BSBM release 0.2: http://sourceforge.net/projects/bsbmtools/files/bsbmtools/bsbmtools-0.2/bsbmtools-v0.2.zip.
+    It seems this one is obsoleted by the next one
+  - BSBM+BI release 0.7.8: http://sourceforge.net/projects/bibm/files/bibm-0.7.8.tgz
+- Queries
+  - query format: http://sourceforge.net/p/bibm/code/HEAD/tree/trunk/bibm/docs/OpenLinkBDSMUserGuide.html
+  - query files: http://sourceforge.net/p/bibm/code/HEAD/tree/trunk/bibm/bsbm/
+  - queries on page: http://wifo5-03.informatik.uni-mannheim.de/bizer/berlinsparqlbenchmark/V3/spec/ExploreUseCase/index.html#queryTripleQ1
+- Virtuoso and OWLIM results on a couple of scaleFactors for:
+  - Explore Use Case: http://wifo5-03.informatik.uni-mannheim.de/bizer/berlinsparqlbenchmark/results/V7/index.html#resultsExplore
+  - BI use case: http://wifo5-03.informatik.uni-mannheim.de/bizer/berlinsparqlbenchmark/results/V7/index.html#resultsBI
+- Cluster
+  - Cluster description (but it's not very detailed)
+  - Cluster results: http://wifo5-03.informatik.uni-mannheim.de/bizer/berlinsparqlbenchmark/results/V7/index.html#resultsCluster
+** LOD2 Cluster
+Description of sophisticated hardware:
+- http://static.lod2.eu/Deliverables/LOD2_D2.1.3_LOD_Cloud_Hosted_On_The_LOD2_Knowledge_Store_Cluster_50B_Triples.pdf
+** StarDog results
+Succinct sheet describing results for BSBM, LUBM, SP2B:
+- https://docs.google.com/spreadsheets/d/1oHSWX_0ChZ61ofipZ1CMsW7OhyujioR28AfHzU9d56k/pubhtml
+Nice variety but little detail
+** TPC-H
+- http://www.tpc.org/tpch/results/tpch_price_perf_results.asp
+Tons of detial, maybe not so relevant for us. Each run has representations at these levels of detail:
+- One line
+  : Rank, Company, System, QphH, Price/QphH, Watts/KQphH, System Availability, Database, Operating System, Date Submitted, Cluster
+- Executive Summary: eg 13 pages
+- Full Disclosure Report: eg 37 pages
+- Supporting Files: 6Mb to 3Gb(!): won't look at them
+Results:
+- TPC-H Oracle:
+  [[http://www.tpc.org/tpch/results/tpch_result_detail.asp?id=111092601&layout=]]
+- TPC-H Huawei:
+  [[http://www.tpc.org/tpch/results/tpch_result_detail.asp?id=113111601&layout=]]
+
+* BM Statistics
+The most important output of BM is the statistical representation of benchmark results.
+** Stats Terms
+It may be hard for someone without stats background to understand stats ontologies, so we provide first some terms from stats/OLAP.
+Pleae note that these terms are slanted towards teh Cube ontology.
+The key terms are Dimension, Attribute, Measure.
+- Cube: a multidimensional data structure carrying Observations
+- Observation: a value plus a number of Components that help make sense of it
+- Component: any of Dimension, Attribute or Measure; the facets defining the structure of a cube
+- Data Structure Definition: the set of components defining a cube.
+- Dimension: identifies the observations: where the observations lie
+  - In a cube, all observations must have the same dimensions (no nulls are allowed), but some shortcuts/normalization are allowed
+- Attribute: qualify and interpret the value, eg: unit of measurement, estimated, provisional
+- Measure: carries the observed value: what the values are
+- measureType Dimension: a Dimension defining which Measure is applicable to an Observation (like a tag/discriminator in a [[https://en.wikipedia.org/wiki/Tagged_union][Tagged Union]])
+- Slice: a cube subset where some of the Dimensions are fixed. Allows more economical cube description, and views over cubes (eg time series)
+** Stats Ontologies
+We've looked at a number of stats ontologies, described in subsections below (the ones we use are described last). Legend:
+- x = well developed or widely used
+- ? = maybe will use
+- + = will use
+| *s* | *prefix* | *ontology*                                                                            | *could be used for*                                     |
+|     | Disco    | DDI RDF Discovery Vocabulary (Data Documentation Initiative)                          | Detailed representation of stats, questions, cases..    |
+| +   | QB       | RDF Data Cube Vocabulary                                                              | "Canonical" stats ontology (SCOVO is the older version) |
+| ?   | QB4OLAP  | Cube for OLAP, see [[https://books.google.bg/books?id%3DC7x_BAAAQBAJ&lpg%3DPA554&ots%3DWohdQ_jPkk&dq%3Dqb%253AcomponentAttachment&pg%3DPA558#v%3Donepage&q&f%3Dtrue][Data Warehouse Systems: Design and Implementation]] sec 14.3.2 p.557 | Cube can't represent hierarchical dimensions            |
+| +   | SDMX     | Statistical Data and Metadata eXchange                                                | common stat concepts, attributes, dimensions            |
+| ?   | SStat    | DDI Controlled Vocabularies - SummaryStatistic                                        | Concepts for summary stats (min, max, mean...)          |
+|     | XKOS     | Extended Knowledge Organisation System                                                | SKOS extension with statistical levels                  |
+*** 270a
+The site http://270a.info/ is a treasure trove of deployed datasets, patterns, codelists, etc.
+It includes stats data from some 10 national and international stats offices, including Eurostat, ECB, WB, FAO, etc.
+
+Interesting articles:
+- http://csarven.ca/linked-sdmx-data
+- http://csarven.ca/linked-statistical-data-analysis
+- http://csarven.ca/statistical-linked-dataspaces (MS thesis)
+
+Tool
+- http://stats.270a.info/cube-designer: pick up cube components, generates a cube definition
+Eg this is how I found they have concepts for Percentile:
+#+BEGIN_SRC Turtle
+<http://worldbank.270a.info/property/percentile> a qb:DimensionProperty , rdf:Property ;
+  rdfs:label   "Percentile"@en;
+  rdfs:range  <http://worldbank.270a.info/classification/percentile>;
+  qb:codeList <http://worldbank.270a.info/classification/percentile>.
+<http://worldbank.270a.info/classification/percentile/90> a skos:Concept;
+  skos:inScheme <http://worldbank.270a.info/property/percentile>.
+#+END_SRC
+
+*** Disco
+Disco looks very promising, and has detailed in-depth stats examples (a lot more elaborate than Cube).
+It says "Disco only describes the structure of a dataset, but is not concerned with representing the actual data in it".
+But in fact the examples show data representation as well.
+- http://www.ddialliance.org/Specification/RDF/Discovery
+- spec:  http://rdf-vocabulary.ddialliance.org/discovery.html
+- info on Descriptive Stats:  http://rdf-vocabulary.ddialliance.org/discovery.html#dfn-disco-descriptivestatistics
+*** DDI CV, SStat
+DDI Controlled Vocabularies provides a number of codelists for common stats concepts.
+- homepage: http://www.ddialliance.org/controlled-vocabularies
+- formats: http://www.ddialliance.org/Specification/DDI-CV/
+- RDF format: https://github.com/linked-statistics/DDI-controlled-vocabularies
+**** Summary Statistics
+In particular, Summary Statistics is relevant for us:
+- A Summary Statistic is a single number representation of the characteristics of a set of values
+- Amongst others, defines: ArithmeticMean, Minimum, Maximum, Median (50 percentile), NinthDecile (90 percentile), OtherPercentile
+- HTML: http://www.ddialliance.org/Specification/DDI-CV/SummaryStatisticType_2.0.html
+- RDF: https://github.com/linked-statistics/DDI-controlled-vocabularies/blob/master/SummaryStatisticType/SummaryStatisticType_2.0.rdf
+This is a promising vocabulary and is worth watching. But our current representation doesn't use it because:
+- These codelists are not deployed yet (the namespace does not resolve)
+- We need 95 percentile and 99 percentile but SStat defines "OtherPercentile", so we'd still need to extend or tack a number somewhere
+*** SDMX
+SDMX is an ISO spec providing common stats concepts and components (dimensions, attributes and measures).
+Originally defined in XML and EDI, it's also translated to RDF.
+SDMX depends on Cube, but Cube may be used without SDMX.
+
+Since the same concept (eg Gender) can be used in various roles (eg a Dimension or a Measure), skos:Concepts are used to tie them together.
+A component that is a qb:CodedProperty may also link to a qb:codeList (a skos:ConceptScheme or ad-hoc qb:HierarchicalCodeList).
+
+Say we want to provide a Dimension describing Summary Stats (mean, min, max, etc).
+We define a property ~bm-stat:dimStat~ and tie it up to the concept ~bm-stat:conceptStat~ and a codeList ~bm-stat:stat~:
+#+BEGIN_SRC Turtle
+bm-stat:dimStat a rdf:Property, qb:DimensionProperty, qb:CodedProperty;
+  rdfs:label "Stat"@en;
+  rdfs:comment "Statistic being measured (eg min, max)"@en;
+  rdfs:range bm:Stat;
+  qb:concept bm-stat:conceptStat;
+  qb:codeList bm-stat:stat.
+#+END_SRC
+We also define a class ~bm-stat:Stat~ that's co-extensive with the codeList ~bm-stat:stat~, to allow rdfs:range declaration on the DimensionProperty:
+#+BEGIN_SRC Turtle
+bm-stat:stat a skos:ConceptScheme;
+  rdfs:label "Summary Statistics scheme"@en;
+  rdfs:comment "Single number representation of the characteristics of a set of values"@en;
+  rdfs:seeAlso bm-stat:Stat.
+
+bm-stat:Stat a rdfs:Class, owl:Class;
+  rdfs:label "Stat"@en;
+  rdfs:comment "Codelist (enumeration) of Summary Statistics concepts, eg min, max"@en;
+  rdfs:subClassOf skos:Concept;
+  rdfs:seeAlso bm-stat:stat.
+#+END_SRC
+Finally, we define the individual values as both instances of the class, and ~skos:inScheme~ of the codeList:
+#+BEGIN_SRC Turtle
+bm-stat:min a skos:Concept, bm-stat:Stat ;
+  rdfs:label "Min"@en;
+  rdfs:comment "Minimum value of an observation"@en;
+  skos:inScheme bm-stat:stat.
+#+END_SRC
+
+It is tedious to define all these interlinked entities (a consistent naming approach is essential!)
+Such detailed self-description allows sophisticated cube exploration UIs and SPARQL query generation (rumor has it).
+However, we think it would be easier to develop queries by hand, so we may forgo the use of SDMX in future releases.
+
+*** Cube
+Cube is the "canonical" stats ontology adopted by W3C. It can work together or without SDMX.
+- spec: http://www.w3.org/TR/vocab-data-cube
+- domain model: http://www.w3.org/TR/vocab-data-cube/#outline
+- complete example: http://www.w3.org/TR/vocab-data-cube/#full-example
+- ontologies resolve to: http://publishing-statistical-data.googlecode.com/svn/trunk/specs/src/main/vocab/
+- forum: https://groups.google.com/forum/#!topic/publishing-statistical-data
+
+There are many important parts to the specification, but we highlight only a couple in this section, and a more technical one in the next section.
+- [[http://www.w3.org/TR/vocab-data-cube/#dsd-mm][Multiple Measures]] ::
+  If you need Observations that have several different Measures, there are several approaches:
+  - [[http://www.w3.org/TR/vocab-data-cube/#h4_dsd-mm-obs][Multi-measure observations]]. Each observation has the same set of measures, and attributes can't be applied separately.
+    #+BEGIN_SRC Turtle
+  eg:o1 a ob:Observation;
+    eg:attrUnit unit:MilliSecond;
+    eg:measure1 123;
+    eg:measure2 456.
+    #+END_SRC
+  - [[http://www.w3.org/TR/vocab-data-cube/#h4_dsd-mm-dim][Measure dimension]]. Each observation has one applicable measure, selected by qb:measureType (as a tag/discriminator in a in a [[https://en.wikipedia.org/wiki/Tagged_union][Tagged Union]]).
+    Different attributes can be applied. This is a more regular approach, recommended by SDMX.
+    #+BEGIN_SRC Turtle
+  eg:o1 a ob:Observation;
+    eg:attrUnit unit:MilliSecond;
+    qb:measureType eg:measure1;
+    eg:measure1 123.
+  eg:o2 a ob:Observation;
+    eg:attrUnit unit:Second;
+    qb:measureType eg:measure2;
+    eg:measure2 456.
+    #+END_SRC
+  - Structured observation. You could put several values in one node, but then cannot Slice them independently
+    #+BEGIN_SRC Turtle
+  eg:o1 a ob:Observation;
+    eg:attrUnit unit:MilliSecond;
+    eg:measure [eg:value1 123; eg:value2 456].
+    #+END_SRC
+- [[http://www.w3.org/TR/vocab-data-cube/#dsd-dsd][Data Structure Definition]] (DSD) ::
+  The structure of a Cube is described with a DSD.
+  The same DSD is normally reused between many Cubes with the same structure
+  (eg a SNB DSD will be used by the stats cubes of all SNB Runs).
+  A DSD is created by listing the qb:components that apply to a cube, and optionally defining [[http://www.w3.org/TR/vocab-data-cube/#slices][SliceKeys]].
+  Consistent naming of different kinds of components (eg dim, attr, meas) is essential to facilitate understanding. Eg
+  #+BEGIN_SRC Turtle
+snb-stat:dsd a qb:DataStructureDefinition;
+  ob:component [qb:dimension bm-stat:dimScaleFactor],  # dataset size
+  ob:component [qb:dimension bm-stat:dimStat],         # mean, min, max, ...
+  ob:component [qb:attribute bm-stat:attrUnit],        # MilliSecond, Second, ...
+  ob:component [qb:dimension qb:measureType],          # discriminator for the rest
+  ob:component [qb:measure   bm-stat:measRuntime],     # observe Runtime, or
+  ob:component [qb:measure   bm-stat:measDelayTime].   # observe DelayTime
+  #+END_SRC
+- componentAttachment ::
+  Every Observation must have defined values for all Dimensions and all mandatory Attributes.
+  However, Cube allows some shortcuts by letting you specify a Dimension/Attribute
+  at the level of the cube, slice, or a Measure.
+  This last option is unclear in the spec, see my [[https://groups.google.com/forum/#!topic/publishing-statistical-data/NZcaUhMu0_k][forum posting]] and the next section.
+
+*** Cube Normalization
+If you specify property ~qb:componentAttachment~ with of the values ~qb:DataSet~, ~qb:Slice~, ~qb:MeasureProperty~
+for a Dimension/Attribute, then you fix the value for that Dimension/Attribute at the corresponding higher level, not in the Observation.
+For example (not showing ~qb:DataSet~ for brevity):
+#+BEGIN_SRC Turtle
+eg:myDSD a qb:DataStructureDefinition;
+  qb:component [qb:measure eg:measure1 ];
+  qb:component [qb:measure eg:measure2 ];
+  qb:component [qb:attribute eg:measUnit; qb:componentAttachment qb:MeasureProperty].
+
+eg:measure1 a qb:MeasureProperty;
+  eg:measUnit unit:Percent .
+
+eg:measure2 a qb:MeasureProperty;
+  eg:measUnit unit:Number .
+
+eg:observation1 a qb:Observation;
+  eg:measure1 55;   # Percent
+  eg:measure2 1333. # Number
+#+END_SRC
+
+This allows abbreviated (more economical) cube representation.
+But to simplify SPARQL queries and Integrity constraint checking,
+a [[http://www.w3.org/TR/vocab-data-cube/#normalize-algorithm][Normalization Algorithm]] is defined that expands (flattens) the cube by transferring the values from the higher level to each Observation.
+
+The algorithm is defined in terms of SPARQL updates (INSERT WHERE).
+- Phase 1 are normal RDFS rules
+- Phase 2 are the Cube-specific rules.
+Unfortunately, the above case won't be handled by Phase 2, since it shows only attachment to qb:DataSet or qb:Slice.
+
+We find an extra fourth rule *commented-out* at the original source
+https://code.google.com/p/publishing-statistical-data/source/browse/trunk/src/main/resources/flatten.ru
+(in this case ru is the extension for SPARQL Update):
+#+BEGIN_SRC SPARQL
+# Measure property attachments
+  INSERT {
+      ?obs  ?comp ?value
+  } WHERE {
+      ?spec  qb:componentProperty ?comp ;
+             qb:componentAttachment qb:MeasureProperty .
+      ?dataset qb:structure [qb:component ?spec] .
+      ?comp    a qb:AttributeProperty .
+      ?measure a qb:MeasureProperty;
+               ?comp ?value .
+      ?obs     qb:dataSet ?dataset;
+               ?measure [] .
+  }
+#+END_SRC
+It transfers from a Measure to an Observation, iff:
+- An Attribute ~?comp~ is attached to a MeasureProperty,
+- The Measure is used for the Observation
+- The attribute is declared to have ~qb:componentAttachment qb:MeasureProperty~. To see
+  this, it helps to rewrite the WHERE clause like this
+  (~qb:component~ is super-property of ~qb:attribute~):
+  #+BEGIN_SRC SPARQL
+    ?dataset qb:structure [a qb:DataStructureDefinition;
+      qb:component
+        [qb:attribute ?attr; qb:componentAttachment qb:MeasureProperty]].
+    ?attr    a qb:AttributeProperty .
+    ?measure a qb:MeasureProperty;
+      ?attr ?value .
+    ?obs a qb:Observation;
+      qb:dataSet ?dataset;
+      ?measure ?measValue.
+  #+END_SRC
+*** Normalization with Ontotext GraphDb Rules
+INSERT WHERE works fine for static/small datasets, but what if you have a huge Cube that's updated incrementally?
+(Eg a cube to which observations are being added by a streaming benchmark driver).
+Ontotext GraphDb rules work better in such situation, since they allow you to insert and delete triples freely, while maintaining consistency.
+
+The script [[./cube-normalize.pl]] takes a .ru file as described above and produces a rule
+file [[./cube-normalize.pie]] (in addition, a RDFS rules file needs to be loaded or merged with this one).
+Eg the *Measure property attachments* INSERT WHERE rule from the previous section is translated to this rule:
+#+BEGIN_SRC
+  Id: qb2_Measure_property_attachments
+    spec  <qb:componentProperty> comp
+    spec  <qb:componentAttachment> <qb:MeasureProperty>
+    dataset <qb:structure> struc
+    struc   <qb:component> spec
+    comp    <rdf:type> <qb:AttributeProperty>
+    measure <rdf:type> <qb:MeasureProperty>
+    measure comp value
+    obs     <qb:dataSet> dataset
+    obs     measure blank
+    --------------------------
+    obs  comp value
+#+END_SRC
+In addition, it adds an inverse propertyChainAxiom for the loop between DataSet, Slice and Observation (see the Cube [[http://www.w3.org/TR/vocab-data-cube/#outline][domain model]]):
+#+BEGIN_SRC
+  Id: qbX_slice_observation_dataSet
+    dataset <qb:slice>       slice
+    slice   <qb:observation> obs
+    --------------------------------
+    obs     <qb:dataSet>     dataset
+#+END_SRC
+This allows you to skip ~qb:dataSet~ for an Observation that's already attached to a Slice of the cube using ~qb:observation~.
+
+Note: "qb2" stands for "Cube Phase2 normalization", and "qbX" stands for "I'm too lazy to repeat myself".
+
+*** Benchmark Result Dimensions
+We will document all particulars of a benchmark run in ~bm:Run~, including:
+- Full hardware and software details of the System Under Test
+- URLs of configuration files of the System Under Test, test driver, etc
+- RDF nodes with property-value for important configuration parameters
+In contrast, the Benchmark Result examples (eg [[SNB Turtle]] below) as of <2015-01-21> use a really minimal set of dimensions:
+- ~dimQuery~ states which query (or Total) the measurement pertains to
+- ~dimStat~ states which Summary Statistic [[Summary Statistics]] (eg mean, min, max) is expressed by the measurement
+To compare or chart numbers across different Runs (varying eg database, release, database settings, hardware, benchmark version), 
+we need to use more of the Run parameters as cube Dimensions.
+
+The down-side of every dimension is that it not only adds a triple to every observation,
+but also multiplies the number of observations through Cube Normalization [[Cube Normalization]].
+Eg assume you have a cube with D dimensions, O observations and (D+X)*O triples (where X is proportional to the number of measures and attributes)
+and you add an D+1'th dimension with Y values.
+You'll end up with O*Y observations and (D+X+1)*O*Y triples.
+ 
+So what are the important benchmark Run parameters to add as Dimensions? Currently proposed:
+- scaleFactor: to compare performance against dataset size
+- database release: to compare the evolution of a database in time
+- database: to compare across databases (note: this is implied by "database release", so we could spare it)
+- RAM size (Gb): a key hardware parameter
+
+How about these?
+- Loading parameters such as number of agents/threads (SNB threadCount), SNB timeCompressionRatio, SNB gctDeltaDuration. 
+  IMHO the benchmark sponsor is supposed to optimize these until maximum database performance is achieved, so we don't compare across them
+- CPU and Disk performance. But is there a standardized way to report them?
+- query mix, eg which queries are enabled, whether analytical queries were included, query interleave times, etc.
+  The number and times for each query type are reported through ~dimQuery~, 
+  but the mix as a whole also affects the performance of each query, so maybe we need to capture this.
+  But how? A query mix is a complex structure in itself...
+- SUT platform such as operating system, JVM etc: it's possible (but maybe not very likely) we'd want to compare against such factors
+- Total SUT price. TCP captures that (and queries per second per dollar), so maybe we should too
+
+In contrast, we don't need to capture the folowing as Dimensions:
+- benchmark: can't compare across benchmarks (can't compare apples to oranges)
+- benchmark version: this is a key parameter of a Run, but again we can't compare apples to oranges
+- driver version: an important parameter of a Run, but it's not supposed to affect benchmark performance
+- dataset parameters such as dictionaries used, network distributions, literal distributions, etc.
+
+** SNB Sample1
+The SNB spec [[https://github.com/ldbc/ldbc_snb_docs/blob/master/LDBC_SNB_v0.2.0.pdf][LDBC_SNB_v0.2.0]] sec 3.3 "Gathering the results" provides the example [[./snb-sample1.json]]:
+#+BEGIN_SRC js
+      "name": "Query1",
+      "count": 50,
+      "unit": "MILLISECONDS",
+      "run_time": {
+        "name": "Runtime",
+        "unit": "MILLISECONDS",
+        "count": 50,
+        "mean": 100,
+        "min": 2,
+        "max": 450,
+        "50th_percentile": 98,
+        "90th_percentile": 129,
+        "95th_percentile": 432,
+        "99th_percentile": 444
+      },
+      "start_time_delay": {
+        "name": "Start Time Delay",
+        "unit": "MILLISECONDS",
+        "count": 7,
+        "mean": 3.5714285714285716,
+        "min": 0,
+        "max": 25,
+        "50th_percentile": 0,
+        "90th_percentile": 0,
+        "95th_percentile": 25,
+        "99th_percentile": 25
+      },
+      "result_code": {
+        "name": "Result Code",
+        "unit": "Result Code",
+        "count": 50,
+        "all_values": {
+          "0": 42,
+          "1": 8
+        }
+      }
+#+END_SRC
+It provides stats for 50 executions of Query1 along 3 measures:
+- Runtime: query execution time
+- StartDelay: delay between scheduled and actual query start time.
+- Result: result code
+
+Note: queries are scheduled by the driver using these parameters:
+- LdbcQueryN_interleave: interval between successive executions of query N
+- timeCompressionRatio: multiplier to compress/stretch all interleave times
+- toleratedExecutionDelay: if start delay exceeds this, a timeout is recorded
+
+These measures are interesting, since:
+- We have 2 numeric measures (MilliSeconds) and 1 categorial (result code)
+- The numeric measures provide a number of Summary Statistics
+
+*** SNB Turtle
+We represent this as the following Turtle.
+- We populate the cube using 3 Slices, each having the same structure ~snb-stat:sliceByQueryAndMeasure~
+- We model the Summary Statistics as Dimension (~bm-stat:dimStat~), and the unit-of-measure as Attribute (~bm-stat:attrUnit~)
+- For the categorial measure ~snb-stat:measResult~ we model the individual categories (code values) as Attrbute (~bm-stat:attrResult~)
+#+BEGIN_SRC Turtle
+snb-run:sample1-cube a qb:DataSet;
+  qb:structure snb-stat:dsdCube;
+  qb:slice snb-run:sample1-sliceRuntime, snb-run:sample1-sliceStartDelay, snb-run:sample1-sliceResult.
+
+snb-run:sample1-sliceRuntime a qb:Slice;
+  qb:sliceStructure snb-stat:sliceByQueryAndMeasure;
+  snb-stat:dimQuery snb:Query1;
+  qb:measureType qb:measRuntime;
+  qb:observation
+    [ bm-stat:dimStat bm-stat:count;        bm-stat:measRuntime  50; bm-stat:attrUnit unit:Number      ],
+    [ bm-stat:dimStat bm-stat:mean;         bm-stat:measRuntime 100; bm-stat:attrUnit unit:MilliSecond ],
+    [ bm-stat:dimStat bm-stat:min;          bm-stat:measRuntime   2; bm-stat:attrUnit unit:MilliSecond ],
+    [ bm-stat:dimStat bm-stat:max;          bm-stat:measRuntime 450; bm-stat:attrUnit unit:MilliSecond ],
+    [ bm-stat:dimStat bm-stat:median;       bm-stat:measRuntime  98; bm-stat:attrUnit unit:MilliSecond ],
+    [ bm-stat:dimStat bm-stat:percentile90; bm-stat:measRuntime 129; bm-stat:attrUnit unit:MilliSecond ],
+    [ bm-stat:dimStat bm-stat:percentile95; bm-stat:measRuntime 432; bm-stat:attrUnit unit:MilliSecond ],
+    [ bm-stat:dimStat bm-stat:percentile99; bm-stat:measRuntime 444; bm-stat:attrUnit unit:MilliSecond ].
+
+snb-run:sample1-sliceStartDelay a qb:Slice;
+  qb:sliceStructure snb-stat:sliceByQueryAndMeasure;
+  snb-stat:dimQuery snb:Query1;
+  qb:measureType snb-stat:measStartDelay;
+  qb:observation
+    [ bm-stat:dimStat bm-stat:count;        bm-stat:measStartDelay  7;    bm-stat:attrUnit unit:Number      ],
+    [ bm-stat:dimStat bm-stat:mean;         bm-stat:measStartDelay  3.57; bm-stat:attrUnit unit:MilliSecond ],
+    [ bm-stat:dimStat bm-stat:min;          bm-stat:measStartDelay  0;    bm-stat:attrUnit unit:MilliSecond ],
+    [ bm-stat:dimStat bm-stat:max;          bm-stat:measStartDelay 25;    bm-stat:attrUnit unit:MilliSecond ],
+    [ bm-stat:dimStat bm-stat:median;       bm-stat:measStartDelay  0;    bm-stat:attrUnit unit:MilliSecond ],
+    [ bm-stat:dimStat bm-stat:percentile90; bm-stat:measStartDelay  0;    bm-stat:attrUnit unit:MilliSecond ],
+    [ bm-stat:dimStat bm-stat:percentile95; bm-stat:measStartDelay 25;    bm-stat:attrUnit unit:MilliSecond ],
+    [ bm-stat:dimStat bm-stat:percentile99; bm-stat:measStartDelay 25;    bm-stat:attrUnit unit:MilliSecond ].
+
+snb-run:sample1-sliceResult a qb:Slice;
+  qb:sliceStructure snb-stat:sliceByQueryAndMeasure;
+  snb-stat:dimQuery snb:Query1;
+  qb:measureType snb-stat:measResult;
+  qb:observation
+    [ bm-stat:dimStat bm-stat:count; bm-stat:measResult 50;  bm-stat:attrResult snb-stat:result-total ],
+    [ bm-stat:dimStat bm-stat:count; bm-stat:measResult 42;  bm-stat:attrResult snb-stat:result-0 ],
+    [ bm-stat:dimStat bm-stat:count; bm-stat:measResult  8;  bm-stat:attrResult snb-stat:result-1 ].
+#+END_SRC
+I hope this representation fairly obviously corresponds to the JSON. *Please comment*.
+
+Possible extensions:
+- More dimensions, see [[Benchmark Result Dimensions]]
+- May need some hierarchical dimension logic to capture the relation between Query Mix and individual Queries
+
+Converting from JSON to Turtle should not be hard.
+We might even be able to convert automatically by using a JSONLD Context, but I have not tried it.
+
+*** SNB Header
+The JSON also has a small "Header":
+#+BEGIN_SRC js
+  "unit": "MILLISECONDS",
+  "start_time": 1400750662691,
+  "finish_time": 1400750667691,
+  "total_duration": 5000,
+  "total_count": 50,
+#+END_SRC
+
+I thought about representing this as a small cube, but decided it's overkill.
+So I hacked something using duct tape from various vocabularies (PROV, DCT, RDF).
+Actually there is some thought invested in here:
+- PROV will be used significantly to describe Runs: who, when, what entities were used (eg benchmark definition, SUT, etc)
+- The general pattern "propName-value-unit" will be used throughout, eg for hardware features, benchmark parameters, etc
+#+BEGIN_SRC Turtle
+snb-run:sample1 a bm:Run;
+  prov:startedAtTime [rdf:value 1400750662691; qudt:unit unit:MilliSecond];
+  prov:endedAtTime   [rdf:value 1400750667691; qudt:unit unit:MilliSecond];
+  dct:extent         [rdf:value 5000;          qudt:unit unit:MilliSecond];
+  dct:extent         [rdf:value 50;            qudt:unit unit:Number];
+  # TODO: describe benchmark, driver, system under test, etc
+  bm-stat:dataset snb-run:sample1-cube.
+#+END_SRC
+Notes:
+- The most important property is the link ~bm-stat:dataset snb-run:sample1-cube~ to the cube.
+- The Run needs a lot more contextual links (see "PROV" above)
+- Using dct:extent twice for such varied things like Duration and Count may seem weird,
+  but it matches its definition "size or duration of the resource", and Unit distinguishes between the two.
+
+*** SNB SPARQL
+To make some charts, we need to extract data with SPARQL. Given a Run, say we want to extract:
+- Each Runtime observation
+- Each Query, which will be the series. Assume snb:Query has sortable ~dc:identifier~ (eg 1 or "Q001")
+- Mean, min, max to plot "line with error bars"
+- A "query fulfillment ratio" being "Query runtime count" divided by "Run total count"
+Since Cube Normalization has brought all values down to each Observation, this is easy.
+Since there are no nulls, we don't need OPTIONALs, so it's also fast.
+We assume that the SPARQL variable ~$Run~ is instantiated (i.e. it's a SPARQL parameter)
+#+BEGIN_SRC SPARQL
+select ?query ?mean ?min ?max ?fulfillmentRatio {
+  $Run bm-stat:dataSet ?dataset;
+       dct:extent [rdf:value ?runCount; qudt:unit unit:Number].
+  ?obs qb:dataSet ?dataset; qb:measureType qb:measRuntime;
+       snb-stat:dimQuery [dc:identifier ?query].
+  {?obs bm-stat:dimStat bm-stat:count; bm-stat:measRuntime ?count.
+      bind(?count / ?runCount as ?fulfillmentRatio)} union
+  {?obs bm-stat:dimStat bm-stat:mean;  bm-stat:measRuntime ?mean} union
+  {?obs bm-stat:dimStat bm-stat:min;   bm-stat:measRuntime ?min} union
+  {?obs bm-stat:dimStat bm-stat:max;   bm-stat:measRuntime ?max}
+} order by ?query
+#+END_SRC
+- Note: op:numeric-divide() is xsd:decimal if both operands are xsd:integer, so we don't need to coerce to decimal
+- TODO: check how the UNION behaves
+*** SNB Stat Ontology
+[[./snb-stat.ttl]] is based on BM Stat [[BM%20Stat%20Ontology][BM Stat Ontology]], and includes some Stat things that are specific to SNB
+(we could decide to move it into BM Stat to keep the benchmarks-specific ontology minimal).
+
+First a more specific Dimension that inherits all fields from ~bm-stat:dimQuery~ but fixes the range to ~snb:Query~. 
+This allows checking that the right query is used in SNB cubes, but that's little gain. 
+We can do without this property.
+#+BEGIN_SRC Turtle
+snb-stat:dimQuery a rdf:Property, qb:DimensionProperty;
+  rdfs:label "query"@en;
+  rdfs:comment "Query being measured"@en;
+  rdfs:subPropertyOf bm-stat:dimQuery;
+  rdfs:range snb:Query;
+  qb:concept bm-stat:conceptQuery.
+#+END_SRC
+
+Then a Measure for the SNB-specific concept of "start time delay":
+#+BEGIN_SRC Turtle
+snb-stat:measStartDelay a rdf:Property, qb:MeasureProperty;
+  rdfs:label "start delay"@en;
+  rdfs:comment "Delay from scheduled time to actual execution time"@en;
+  rdfs:range xsd:decimal.
+#+END_SRC
+
+Then we define a concept of "Result (code)", and an Attribute and Dimension using that concept. 
+You can see how the Attribute and Dimension are tied together through the concept.
+The Attribute is categorial (a qb:CodedProperty) while the Measure is numeric (integer).
+#+BEGIN_SRC Turtle
+snb-stat:attrResult a rdf:Property, qb:AttributeProperty, qb:CodedProperty;
+  rdfs:label "result code"@en;
+  rdfs:comment "Result being counted"@en;
+  rdfs:range snb-stat:Result;
+  qb:concept bm-stat:conceptResult;
+  qb:codeList snb-stat:result.
+
+snb-stat:measResult a rdf:Property, qb:MeasureProperty;
+  rdfs:label "result count"@en;
+  rdfs:comment "Count of results"@en;
+  qb:concept bm-stat:conceptResult;
+  rdfs:range xsd:integer.
+#+END_SRC
+We also define a codeList and code values (concepts) like ~snb-stat:result-1~ (not interesting).
+
+Now we define a [[http://www.w3.org/TR/vocab-data-cube/#dsd-dsd][DataStructureDefinition]] for the cube. 
+We use [[http://www.w3.org/TR/vocab-data-cube/#h4_dsd-mm-dim][Measure dimension]] ~qb:measureType~ because we got heterogenous observations: 
+the 3 Measures are *not* uniformly populated throughout the cube.
+#+BEGIN_SRC Turtle
+snb-stat:dsdCube a qb:DataStructureDefinition;
+  qb:component 
+    [ qb:dimension snb-stat:dimQuery; qb:componentAttachment qb:Slice ],
+    [ qb:dimension qb:measureType; qb:componentAttachment qb:Slice ],
+    [ qb:dimension bm-stat:dimStat ], # mean, min, max, etc
+    [ qb:attribute bm-stat:attrUnit ], # applicable for measRuntime and measStartDelay
+    [ qb:attribute bm-stat:attrResult ], # applicable for measResult
+    [ qb:measure   bm-stat:measRuntime ],
+    [ qb:measure   snb-stat:measStartDelay ],
+    [ qb:measure   snb-stat:measResult ];
+  qb:sliceKey snb-stat:sliceByQueryAndMeasure.
+#+END_SRC
+
+Finally we define a slice structure. In each slice instance, ~snb-stat:dimQuery and ~qb:measureType~ must be fixed.
+#+BEGIN_SRC Turtle
+snb-stat:sliceByQueryAndMeasure a qb:SliceKey;
+  rdfs:label "slice by query and measure"@en;
+  rdfs:comment "Fix dimensions dimQuery and measureType"@en;
+  qb:componentProperty snb-stat:dimQuery, qb:measureType.
+#+END_SRC
+Please look at [[SNB Turtle]] and check how this structure is used by the cube and slice instances.
+
+*** TODO SNB FDR
+Map c:/my/Onto/proj/LDBC/benchmarks/snb_full_disclosure/full_disclosure.txt
+** SPB Results
+semantic_publishing_benchmark_results.log is a simple text format like this:
+- It's cumulative, so you only need to look at the last block
+- 960260 is the timestamp in MilliSeconds (with warmup), 900 is the timestamp in seconds (without warmup)
+- Editorial are write threads (just 1); Aggregation are read threads (6 of them)
+- Write threads execute 3 kinds of queries (insert, update, delete), read threads execute Q1..Q9
+- Counts per update operation, per query; total updates and total queries
+- "Completed query mixes" is just about equal to the minimum of counts per query (a mix is counted Completed if each query was executed once)
+- Number of errors: total for update operations; per query for read operations
+- Average, min, max MilliSeconds per operation (90, 90, 99 percentiles will also be added)
+[[./spb-sample1.txt]]:
+#+BEGIN_EXAMPLE
+960260 : 
+
+Seconds : 900 (completed query mixes : 296)
+	Editorial:
+		1 agents
+
+		7082  inserts (avg : 85      ms, min : 50      ms, max : 1906    ms)
+		903   updates (avg : 203     ms, min : 128     ms, max : 1894    ms)
+		879   deletes (avg : 110     ms, min : 64      ms, max : 1397    ms)
+
+		8864 operations (7082 CW Inserts (0 errors), 903 CW Updates (0 errors), 879 CW Deletions (0 errors))
+		9.8489 average operations per second
+
+	Aggregation:
+		6 agents
+
+		299   Q1   queries (avg : 2120    ms, min : 10      ms, max : 31622   ms, 0 errors)
+		297   Q2   queries (avg : 13      ms, min : 10      ms, max : 108     ms, 0 errors)
+		297   Q3   queries (avg : 3200    ms, min : 383     ms, max : 85870   ms, 0 errors)
+		298   Q4   queries (avg : 694     ms, min : 100     ms, max : 7135    ms, 0 errors)
+		300   Q5   queries (avg : 368     ms, min : 16      ms, max : 5622    ms, 0 errors)
+		298   Q6   queries (avg : 303     ms, min : 37      ms, max : 10246   ms, 0 errors)
+		297   Q7   queries (avg : 1439    ms, min : 58      ms, max : 4995    ms, 0 errors)
+		297   Q8   queries (avg : 531     ms, min : 80      ms, max : 2293    ms, 0 errors)
+		298   Q9   queries (avg : 9184    ms, min : 509     ms, max : 37868   ms, 0 errors)
+
+		2681 total retrieval queries (0 timed-out)
+		3.0225 average queries per second
+#+END_EXAMPLE
+*** TODO SPB Turtle
+** BM Stat Ontology
+The BM Stat Ontology [[./bm-stat.ttl]] defines common stat concepts that can be used between different benchmarks:
+- Common concepts, such as Run, Runtime, Query, Result (code)
+- Summary Statistics codeList ~bm-stat:stat~, class ~bm-stat:Stat~ and code values, as shown in [[SDMX]]
+- Commonly used dimensions, measures and attributes: ~bm-stat:dimQuery~, ~bm-stat:dimStat~, ~bm-stat:measRuntime~, ~bm-stat:attrUnit~.
+  - These have appropriate ranges: (to be defined in subproperties), ~bm-stat:Stat~, ~xsd:decimal~, ~qudt:Unit~ respectively

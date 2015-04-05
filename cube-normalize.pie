@@ -1,0 +1,65 @@
+// Add this to RDFS rules
+// https://code.google.com/p/publishing-statistical-data/source/browse/trunk/src/main/resources/flatten.ru
+Prefices
+{
+  qb: http://purl.org/linked-data/cube#
+}
+
+Rules
+{
+  Id: qbX_slice_observation_dataSet
+    dataset <qb:slice>       slice
+    slice   <qb:observation> obs
+    ------------------------------
+    obs     <qb:dataSet>     dataset
+
+
+  Id: qb2_Dataset_attachments
+    spec    <qb:componentProperty> comp
+    spec    <qb:componentAttachment> <qb:DataSet>
+    dataset <qb:structure> struc
+    struc   <qb:component> spec
+    dataset comp value
+    obs     <qb:dataSet> dataset
+    --------------------------
+    obs  comp value
+
+
+  Id: qb2_Slice_attachments
+    spec    <qb:componentProperty> comp
+    spec    <qb:componentAttachment> <qb:Slice>
+    dataset <qb:structure> struc
+    struc   <qb:component> spec
+    dataset <qb:slice> slice
+    slice comp value
+    slice <qb:observation> obs
+    --------------------------
+    obs  comp value
+
+
+  Id: qb2_Dimension_values_on_slices
+    spec    <qb:componentProperty> comp
+    comp <rdf:type>  <qb:DimensionProperty>
+    dataset <qb:structure> struc
+    struc   <qb:component> spec
+    dataset <qb:slice> slice
+    slice comp value
+    slice <qb:observation> obs
+    --------------------------
+    obs  comp value
+
+
+  Id: qb2_Measure_property_attachments
+    spec  <qb:componentProperty> comp
+    spec  <qb:componentAttachment> <qb:MeasureProperty>
+    dataset <qb:structure> struc
+    struc   <qb:component> spec
+    comp    <rdf:type> <qb:AttributeProperty>
+    measure <rdf:type> <qb:MeasureProperty>
+    measure comp value
+    obs     <qb:dataSet> dataset
+    obs     measure blank
+    --------------------------
+    obs  comp value
+
+}

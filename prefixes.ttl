@@ -1,0 +1,57 @@
+# http://prefix.cc/dbr,dbo,dct,owl,prov,qudt,rdf,rdfs,schema,skos,unit,xsd.ttl
+@prefix dbr:    <http://dbpedia.org/resource/>.
+@prefix dbo:    <http://dbpedia.org/ontology/>.
+@prefix dct:    <http://purl.org/dc/terms/>.
+@prefix doap:   <http://usefulinc.com/ns/doap#> .
+@prefix gr:     <http://purl.org/goodrelations/v1#>.
+@prefix owl:    <http://www.w3.org/2002/07/owl#>.
+@prefix prov:   <http://www.w3.org/ns/prov#>.
+@prefix qudt:   <http://qudt.org/1.1/schema/qudt#>.
+@prefix rdf:    <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+@prefix rdfs:   <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix rlog:   <http://persistence.uni-leipzig.org/nlp2rdf/ontologies/rlog#> .
+@prefix schema: <http://schema.org/>.
+@prefix skos:   <http://www.w3.org/2004/02/skos/core#>.
+@prefix spin:   <http://spinrdf.org/spin#> .
+@prefix unit:   <http://qudt.org/vocab/unit#>.
+@prefix xsd:    <http://www.w3.org/2001/XMLSchema#>.
+
+# Testing ontologies
+@prefix earl:          <http://www.w3.org/ns/earl#>.
+@prefix nif-stc:       <http://persistence.uni-leipzig.org/nlp2rdf/ontologies/stc#> .
+@prefix rdb2rdf-tc:    <http://vocab.deri.ie/rdb2rdftc#> .
+@prefix rdb2rdf-test:  <http://purl.org/NET/rdb2rdf-test#> .
+@prefix rdf-test1:     <http://www.w3.org/2000/10/rdf-tests/rdfcore/testSchema#> .
+@prefix rdf-test:      <http://www.w3.org/ns/rdftest#> .
+@prefix result-set:    <http://www.w3.org/2001/sw/DataAccess/tests/result-set#> .
+@prefix rut:           <http://rdfunit.aksw.org/ns/core#> .
+@prefix rutg:          <http://rdfunit.aksw.org/data/generators#> .
+@prefix rutp:          <http://rdfunit.aksw.org/data/patterns#> .
+@prefix rutr:          <http://rdfunit.aksw.org/data/results#> .
+@prefix ruts:          <http://rdfunit.aksw.org/data/testsuite#> .
+@prefix rutt:          <http://rdfunit.aksw.org/data/tests#> .
+@prefix test-dawg:     <http://www.w3.org/2001/sw/DataAccess/tests/test-dawg#> .
+@prefix test-descr:    <http://www.w3.org/2006/03/test-description#> .
+@prefix test-manifest: <http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#> .
+@prefix test-query:    <http://www.w3.org/2001/sw/DataAccess/tests/test-query#> .
+@prefix test-update:   <http://www.w3.org/2009/sparql/tests/test-update#> .
+
+# Statistical ontologies
+@prefix disco:          <http://rdf-vocabulary.ddialliance.org/discovery#>.
+@prefix qb4olap:        <http://purl.org/qb4olap/cubes#>.
+@prefix qb:             <http://purl.org/linked-data/cube#>.
+@prefix sdmx-attribute: <http://purl.org/linked-data/sdmx-attribute#>.
+@prefix sdmx-code:      <http://purl.org/linked-data/sdmx-code#>.
+@prefix sdmx-concept:   <http://purl.org/linked-data/sdmx-concept#>.
+@prefix sdmx-measure:   <http://purl.org/linked-data/sdmx-measure#>.
+@prefix sdmx:           <http://purl.org/linked-data/sdmx#>.
+@prefix sstat:          <http://rdf-vocabulary.ddialliance.org/DDICV/SummaryStatisticType_2.0#> . # doesn't resolve yet
+@prefix xkos:           <http://purl.org/linked-data/xkos#>.
+
+# Own prefixes. Subject to change!! 
+@prefix bm:       <http://ldbcouncil.org/bm#> .       # BenchMarking ontology
+@prefix bm-stat:  <http://ldbcouncil.org/bm-stat#> .  # BenchMarking Stats ontology
+@prefix snb:      <http://ldbcouncil.org/snb#> .      # SocialNetworkBenchmarking ontology (queries)
+@prefix snb-run:  <http://ldbcouncil.org/snb-run/> .  # SocialNetworkBenchmarking runs (data directory)
+@prefix snb-stat: <http://ldbcouncil.org/snb-stat#> . # SocialNetworkBenchmarking Stats ontology (specific cube)
+

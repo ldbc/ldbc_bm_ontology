@@ -1,0 +1,114 @@
+# -- BM Statistics concepts -------------------------------------------
+
+bm-stat:concept a skos:ConceptScheme;
+  rdfs:label "Benchmarking Stats concept scheme"@en.
+
+bm-stat:conceptRun a skos:Concept ;
+  rdfs:label "Run"@en;
+  rdfs:comment "Benchmarking run the observations are about"@en;
+  skos:inScheme bm-stat:concept.
+
+bm-stat:conceptRuntime a skos:Concept ;
+  rdfs:label "Runtime"@en;
+  rdfs:comment "Runtime of a run"@en;
+  skos:inScheme bm-stat:concept.
+
+bm-stat:conceptQuery a skos:Concept ;
+  rdfs:label "Query"@en;
+  rdfs:comment "Query being measured. TODO: query mix"@en;
+  skos:inScheme bm-stat:concept.
+
+bm-stat:conceptStat a skos:Concept ;
+  rdfs:label "Stat"@en;
+  rdfs:comment "Summary Statistic being measured (eg min, max)"@en;
+  skos:inScheme bm-stat:concept;
+  rdfs:seeAlso bm-stat:stat.
+
+bm-stat:conceptResult a skos:Concept ;
+  rdfs:label "Result"@en;
+  rdfs:comment "Result code being counted"@en;
+  skos:inScheme bm-stat:concept.
+
+# -- Summary Statistics --------------------------
+
+bm-stat:stat a skos:ConceptScheme;
+  rdfs:label "Summary Statistics scheme"@en;
+  rdfs:comment "Single number representation of the characteristics of a set of values"@en;
+  rdfs:seeAlso bm-stat:Stat,
+    <http://www.ddialliance.org/Specification/DDI-CV/SummaryStatisticType_2.0.html>,
+    <https://github.com/linked-statistics/DDI-controlled-vocabularies/blob/master/SummaryStatisticType/SummaryStatisticType_2.0.rdf>.
+
+bm-stat:Stat a rdfs:Class, owl:Class;
+  rdfs:label "Stat"@en;
+  rdfs:comment "Codelist (enumeration) of Summary Statistics concepts, eg min, max"@en;
+  rdfs:subClassOf skos:Concept;
+  rdfs:seeAlso bm-stat:stat.
+
+bm-stat:count a skos:Concept, bm-stat:Stat ;
+  rdfs:label "Count"@en;
+  rdfs:comment "Population count (number of observations)"@en;
+  skos:inScheme bm-stat:stat.
+
+bm-stat:min a skos:Concept, bm-stat:Stat ;
+  rdfs:label "Min"@en;
+  rdfs:comment "Minimum value of an observation"@en;
+  skos:inScheme bm-stat:stat.
+
+bm-stat:mean a skos:Concept, bm-stat:Stat ;
+  rdfs:label "Mean"@en;
+  rdfs:comment "Mean value of an observation"@en;
+  skos:inScheme bm-stat:stat.
+
+bm-stat:median a skos:Concept, bm-stat:Stat ;
+  rdfs:label "Median"@en;
+  rdfs:comment "Median (50 percentile) value of an observation"@en;
+  skos:inScheme bm-stat:stat.
+
+bm-stat:percentile90 a skos:Concept, bm-stat:Stat ;
+  rdfs:label "90 percentile"@en;
+  rdfs:comment "90 percentile value of an observation"@en;
+  skos:inScheme bm-stat:stat.
+
+bm-stat:percentile95 a skos:Concept, bm-stat:Stat ;
+  rdfs:label "95 percentile"@en;
+  rdfs:comment "95 percentile value of an observation"@en;
+  skos:inScheme bm-stat:stat.
+
+bm-stat:percentile99 a skos:Concept, bm-stat:Stat ;
+  rdfs:label "99 percentile"@en;
+  rdfs:comment "99 percentile value of an observation"@en;
+  skos:inScheme bm-stat:stat.
+
+bm-stat:max a skos:Concept, bm-stat:Stat ;
+  rdfs:label "Max"@en;
+  rdfs:comment "Maximum value of an observation"@en;
+  skos:inScheme bm-stat:stat.
+
+# -- BM dimensions (dim), measures (meas), attributes (attr) --------
+
+bm-stat:dimQuery a rdf:Property, qb:DimensionProperty;
+  rdfs:label "Query"@en;
+  rdfs:comment "Query being measured. TODO: query mix"@en;
+  qb:concept bm-stat:conceptQuery.
+
+bm-stat:dimStat a rdf:Property, qb:DimensionProperty, qb:CodedProperty;
+  rdfs:label "Stat"@en;
+  rdfs:comment "Statistic being measured (eg min, max)"@en;
+  rdfs:range bm-stat:Stat;
+  qb:concept bm-stat:conceptStat;
+  qb:codeList bm-stat:stat.
+
+bm-stat:measRuntime a rdf:Property, qb:MeasureProperty;
+  rdfs:label "Runtime"@en;
+  rdfs:comment "Runtime of a query or query mix"@en;
+  rdfs:subPropertyOf sdmx-measure:obsValue;
+  rdfs:range xsd:decimal;
+  qb:concept bm-stat:conceptRuntime.
+    
+bm-stat:attrUnit a qb:AttributeProperty, rdf:Property  ;
+  rdfs:label "Unit of Measure"@en ;
+  rdfs:comment "Unit in which the data values are expressed. We always use QUDT units"@en ;
+  rdfs:subPropertyOf sdmx-attribute:unitMeasure ;
+  rdfs:range qudt:Unit;
+  qb:concept sdmx-concept:unitMeasure .
+
